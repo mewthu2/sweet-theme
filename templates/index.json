@@ -31,7 +31,7 @@
       "settings": {
         "eyebrow": "arraste",
         "heading": "Os favoritos",
-        "collection": "",
+        "collection": "frontpage",
         "products_to_show": 8,
         "show_view_all": false
       }
