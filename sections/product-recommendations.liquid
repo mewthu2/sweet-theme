@@ -1,0 +1,72 @@
+<product-recommendations
+  class="product-recommendations section-spacing"
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent=related"
+  style="--columns: {{ section.settings.products_to_show }};"
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <div class="section-heading">
+      <h2>{{ section.settings.heading }}</h2>
+    </div>
+    <ul class="product-grid" role="list">
+      {%- for recommendation in recommendations.products -%}
+        <li>{% render 'product-card', product: recommendation, show_quick_add: true %}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+</product-recommendations>
+
+{% javascript %}
+  if (!customElements.get('product-recommendations')) {
+    customElements.define(
+      'product-recommendations',
+      class extends HTMLElement {
+        connectedCallback() {
+          if (this.querySelector('.product-grid')) return;
+          const observer = new IntersectionObserver(
+            (entries) => {
+              if (!entries[0].isIntersecting) return;
+              observer.disconnect();
+              fetch(this.dataset.url)
+                .then((response) => response.text())
+                .then((text) => {
+                  const html = new DOMParser().parseFromString(text, 'text/html');
+                  const next = html.querySelector('product-recommendations');
+                  if (next && next.innerHTML.trim()) this.innerHTML = next.innerHTML;
+                })
+                .catch(() => {});
+            },
+            { rootMargin: '0px 0px 400px 0px' }
+          );
+          observer.observe(this);
+        }
+      }
+    );
+  }
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Recomendações",
+  "class": "section-recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Combina com"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Quantidade de produtos",
+      "default": 4
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

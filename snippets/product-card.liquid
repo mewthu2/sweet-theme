@@ -1,0 +1,165 @@
+{% doc %}
+  Renders a product card with hover image, badge, subtitle, price and optional quick add.
+
+  @param {product} product - The product to render
+  @param {boolean} [show_quick_add] - Show an add to cart button under the card
+  @param {string} [sizes] - The sizes attribute for the image
+  @param {boolean} [lazy] - Lazy load the image, defaults to true
+
+  @example
+  {% render 'product-card', product: product, show_quick_add: true %}
+{% enddoc %}
+
+{%- liquid
+  assign sizes = sizes | default: '(min-width: 750px) 25vw, 50vw'
+  assign loading = 'lazy'
+  if lazy == false
+    assign loading = 'eager'
+  endif
+  assign subtitle = product.metafields.custom.subtitle.value | default: product.type
+  assign second_image = product.media[1].preview_image
+-%}
+
+<article class="product-card">
+  <a href="{{ product.url }}" class="product-card__media{% if second_image %} product-card__media--hover{% endif %}" tabindex="-1" aria-hidden="true">
+    {%- if product.featured_media -%}
+      {{
+        product.featured_media.preview_image
+        | image_url: width: 900
+        | image_tag: loading: loading, sizes: sizes, widths: '300, 450, 600, 900', class: 'product-card__image', alt: product.featured_media.alt
+      }}
+      {%- if second_image -%}
+        {{
+          second_image
+          | image_url: width: 900
+          | image_tag: loading: 'lazy', sizes: sizes, widths: '300, 450, 600, 900', class: 'product-card__image product-card__image--secondary', alt: ''
+        }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}
+    {%- endif -%}
+    {% render 'product-badge', product: product, class: 'product-card__badge' %}
+  </a>
+
+  <div class="product-card__info">
+    <h3 class="product-card__title product-title-case">
+      <a href="{{ product.url }}">{{ product.title | escape }}</a>
+    </h3>
+    {%- if subtitle != blank -%}
+      <p class="product-card__subtitle">{{ subtitle }}</p>
+    {%- endif -%}
+    {% render 'price', product: product, class: 'product-card__price' %}
+  </div>
+
+  {%- if show_quick_add -%}
+    <div class="product-card__actions">
+      {%- if product.has_only_default_variant -%}
+        {%- form 'product', product, class: 'product-card__form', data-product-form: '' -%}
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          <button
+            type="submit"
+            name="add"
+            class="button button--secondary button--full product-card__add"
+            {% unless product.available %}
+              disabled
+            {% endunless %}
+          >
+            {%- if product.available -%}
+              {{ 'products.add_to_cart' | t }}
+            {%- else -%}
+              {{ 'products.sold_out' | t }}
+            {%- endif -%}
+          </button>
+        {%- endform -%}
+      {%- else -%}
+        <a href="{{ product.url }}" class="button button--secondary button--full product-card__add">
+          {{- 'products.choose_options' | t -}}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</article>
+
+{% stylesheet %}
+  .product-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    gap: 0.9rem;
+  }
+
+  .product-card__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+
+  .product-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.4s var(--ease), transform 0.6s var(--ease);
+  }
+
+  .product-card__image--secondary {
+    opacity: 0;
+  }
+
+  @media (hover: hover) {
+    .product-card__media--hover:hover .product-card__image--secondary {
+      opacity: 1;
+    }
+
+    .product-card__media:hover .product-card__image {
+      transform: scale(1.02);
+    }
+  }
+
+  .product-card__badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+  }
+
+  .product-card__info {
+    display: grid;
+    gap: 0.2rem;
+    font-size: 0.8125rem;
+  }
+
+  .product-card__title {
+    font-family: var(--font-body--family);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+
+  .product-card__title a {
+    text-decoration: none;
+  }
+
+  .product-card__title a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  .product-card {
+    position: relative;
+  }
+
+  .product-card__actions {
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+  }
+
+  .product-card__add {
+    min-height: 2.5rem;
+    padding-block: 0.5rem;
+  }
+{% endstylesheet %}

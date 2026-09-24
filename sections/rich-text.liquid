@@ -1,0 +1,99 @@
+<div
+  class="rich-text full-width"
+  style="--rich-bg: {{ section.settings.background }}; --rich-align: {{ section.settings.alignment }};"
+>
+  <div class="rich-text__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="rich-text__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="rte rich-text__text">{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="button button--secondary">
+        {{- section.settings.button_label -}}
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .rich-text {
+    background: var(--rich-bg);
+    padding: clamp(3rem, 6vw, 6rem) var(--page-margin);
+  }
+
+  .rich-text__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: 44rem;
+    margin-inline: auto;
+    text-align: var(--rich-align);
+    align-items: center;
+  }
+
+  .rich-text__heading {
+    font-size: clamp(1.75rem, 1.3rem + 2vw, 3rem);
+  }
+
+  .rich-text__text {
+    font-size: 1rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Texto",
+  "class": "section-rich-text",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Fundo",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "text_alignment",
+      "id": "alignment",
+      "label": "Alinhamento",
+      "default": "center"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Chamada pequena"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Feito para a sua rotina"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Produtos essenciais, fáceis de usar e com muito carinho em cada detalhe.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do botão"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do botão"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Texto"
+    }
+  ]
+}
+{% endschema %}

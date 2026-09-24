@@ -1,0 +1,115 @@
+{
+  "404": {
+    "title": "Erro 404",
+    "not_found": "Página não encontrada",
+    "back_to_shopping": "Voltar para a loja"
+  },
+  "accessibility": {
+    "skip_to_content": "Pular para o conteúdo"
+  },
+  "blog": {
+    "article_comments": "Comentários",
+    "article_metadata_html": "{{ date }} por {{ author }}",
+    "comment_form_body": "Comentário",
+    "comment_form_email": "E-mail",
+    "comment_form_name": "Nome",
+    "comment_form_submit": "Publicar",
+    "comment_form_title": "Deixe um comentário"
+  },
+  "cart": {
+    "checkout": "Finalizar compra",
+    "continue_shopping": "Continuar comprando",
+    "empty": "Sua sacola está vazia.",
+    "error": "Não foi possível atualizar a sacola. Tente novamente.",
+    "free_shipping_remaining_html": "Faltam <strong>{{ amount }}</strong> para o frete grátis",
+    "free_shipping_unlocked": "Oba! Você ganhou frete grátis",
+    "note": "Observações do pedido",
+    "remove": "Remover",
+    "subtotal": "Subtotal",
+    "taxes_and_shipping": "Frete e descontos calculados no checkout.",
+    "title": "Sacola",
+    "update": "Atualizar",
+    "view_cart": "Ver sacola"
+  },
+  "collections": {
+    "apply": "Aplicar",
+    "clear_all": "Limpar filtros",
+    "empty": "Nenhum produto encontrado.",
+    "from": "De",
+    "product_count": {
+      "one": "{{ count }} produto",
+      "other": "{{ count }} produtos"
+    },
+    "sort_by": "Ordenar por",
+    "title": "Coleções",
+    "to": "Até"
+  },
+  "customers": {
+    "login": {
+      "email": "E-mail",
+      "password": "Senha",
+      "submit": "Entrar",
+      "title": "Entrar"
+    }
+  },
+  "general": {
+    "close": "Fechar",
+    "next": "Próximo",
+    "pagination": "Paginação",
+    "previous": "Anterior"
+  },
+  "gift_card": {
+    "add_to_apple_wallet": "Adicionar à Apple Wallet",
+    "card": "Vale-presente",
+    "expired": "Este vale-presente expirou",
+    "expires_on": "Válido até {{ expires_on }}",
+    "use_at_checkout": "Use este vale-presente no checkout"
+  },
+  "header": {
+    "account": "Conta",
+    "cart": "Sacola",
+    "main_navigation": "Navegação principal",
+    "menu": "Menu",
+    "search": "Busca",
+    "shop_title": "Ver {{ title }}",
+    "view_all": "Ver tudo"
+  },
+  "newsletter": {
+    "email": "Seu e-mail",
+    "submit": "Assinar",
+    "success": "Obrigada por se inscrever!"
+  },
+  "onboarding": {
+    "collection_title": "Coleção",
+    "product_title": "Nome do produto",
+    "product_type": "categoria"
+  },
+  "password": {
+    "title": "Loja em breve",
+    "password": "Senha",
+    "enter": "Entrar"
+  },
+  "products": {
+    "add_to_cart": "Adicionar à sacola",
+    "buy_title": "Comprar {{ title }}",
+    "choose_options": "Escolher opções",
+    "compare_at_price": "Preço original",
+    "decrease_quantity": "Diminuir quantidade",
+    "gallery": "Galeria de imagens",
+    "increase_quantity": "Aumentar quantidade",
+    "on_sale": "Oferta",
+    "price": "Preço",
+    "price_from": "a partir de",
+    "quantity": "Quantidade",
+    "sold_out": "Esgotado",
+    "unavailable": "Indisponível",
+    "view_all": "Ver tudo"
+  },
+  "search": {
+    "title": "Busca",
+    "placeholder": "O que você procura?",
+    "submit": "Buscar",
+    "no_results_html": "Nenhum resultado para “{{ terms }}”",
+    "results_for_html": "{{ count }} resultados para “{{ terms }}”"
+  }
+}

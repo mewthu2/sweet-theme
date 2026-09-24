@@ -1,0 +1,280 @@
+{%- liquid
+  assign fetch_priority = 'auto'
+  if section.index == 1
+    assign fetch_priority = 'high'
+  endif
+-%}
+
+<div
+  class="hero full-width hero--{{ section.settings.height }} hero--{{ section.settings.content_position }}"
+  style="--hero-fg: {{ section.settings.text_color }}; --hero-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
+>
+  <div class="hero__media">
+    {%- if section.settings.image -%}
+      {%- if section.settings.image_mobile -%}
+        <picture>
+          <source
+            media="(max-width: 749px)"
+            srcset="{{ section.settings.image_mobile | image_url: width: 750 }} 750w, {{ section.settings.image_mobile | image_url: width: 1100 }} 1100w, {{ section.settings.image_mobile | image_url: width: 1500 }} 1500w"
+            sizes="100vw"
+          >
+          {{
+            section.settings.image
+            | image_url: width: 3000
+            | image_tag: class: 'hero__image', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2500, 3000', fetchpriority: fetch_priority, loading: 'eager'
+          }}
+        </picture>
+      {%- else -%}
+        {{
+          section.settings.image
+          | image_url: width: 3000
+          | image_tag: class: 'hero__image', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2500, 3000', fetchpriority: fetch_priority, loading: 'eager'
+        }}
+      {%- endif -%}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg hero__image' }}
+    {%- endif -%}
+  </div>
+
+  <div class="hero__content">
+    <div class="hero__text">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow hero__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="h1 hero__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.text != blank -%}
+        <div class="hero__body">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a
+          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+          class="button {{ section.settings.button_style }} hero__button"
+        >
+          {{- section.settings.button_label -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .hero {
+    position: relative;
+    display: grid;
+    min-height: var(--hero-height, 80svh);
+    overflow: hidden;
+    color: var(--hero-fg);
+  }
+
+  .hero--small {
+    --hero-height: 50svh;
+  }
+
+  .hero--medium {
+    --hero-height: 70svh;
+  }
+
+  .hero--large {
+    --hero-height: 85svh;
+  }
+
+  .hero--full {
+    --hero-height: calc(100svh - var(--header-height));
+  }
+
+  .hero__media,
+  .hero__content {
+    grid-area: 1 / 1;
+  }
+
+  .hero__media {
+    position: relative;
+  }
+
+  .hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / var(--hero-overlay)), transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    width: min(var(--page-width), 100%);
+    margin-inline: auto;
+    padding: clamp(1.5rem, 4vw, 3.5rem) var(--page-margin);
+  }
+
+  .hero--bottom-left .hero__content {
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  .hero--bottom-center .hero__content {
+    align-items: flex-end;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero--center .hero__content {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero--top-left .hero__content {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .hero__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    max-width: 34rem;
+  }
+
+  .hero--center .hero__text,
+  .hero--bottom-center .hero__text {
+    align-items: center;
+  }
+
+  .hero--bottom-left .hero__text,
+  .hero--top-left .hero__text {
+    align-items: flex-start;
+  }
+
+  .hero__heading {
+    color: inherit;
+  }
+
+  .hero__body {
+    font-size: 1rem;
+  }
+
+  .hero__button {
+    margin-top: 0.5rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Banner principal",
+  "class": "section-hero",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagem (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Imagem (celular)",
+      "info": "Opcional. Recomendado formato vertical."
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Altura",
+      "options": [
+        { "value": "small", "label": "Pequena" },
+        { "value": "medium", "label": "Média" },
+        { "value": "large", "label": "Grande" },
+        { "value": "full", "label": "Tela cheia" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "header",
+      "content": "Conteúdo"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Chamada pequena",
+      "default": "Novo"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Glow que conquista"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Skincare e make pensados para a sua rotina.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do botão",
+      "default": "Comprar agora"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do botão"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Estilo do botão",
+      "options": [
+        { "value": "button--light", "label": "Claro" },
+        { "value": "", "label": "Verde" },
+        { "value": "button--secondary", "label": "Contorno" }
+      ],
+      "default": "button--light"
+    },
+    {
+      "type": "select",
+      "id": "content_position",
+      "label": "Posição do conteúdo",
+      "options": [
+        { "value": "bottom-left", "label": "Inferior esquerda" },
+        { "value": "bottom-center", "label": "Inferior centro" },
+        { "value": "center", "label": "Centro" },
+        { "value": "top-left", "label": "Superior esquerda" }
+      ],
+      "default": "bottom-left"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Cor do texto",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Escurecimento da imagem",
+      "default": 25
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banner principal"
+    }
+  ]
+}
+{% endschema %}

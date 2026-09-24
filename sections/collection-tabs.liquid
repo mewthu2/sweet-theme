@@ -1,0 +1,185 @@
+<div class="collection-tabs section-spacing" style="--columns: {{ section.settings.columns }};">
+  <div class="collection-tabs__header">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="collection-tabs__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 1 -%}
+      <div class="collection-tabs__list" role="tablist" aria-label="{{ section.settings.heading | default: shop.name | escape }}">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign tab_label = block.settings.label | default: block.settings.collection.title
+            if tab_label == blank
+              assign tab_label = 'onboarding.collection_title' | t
+            endif
+          -%}
+          <button
+            type="button"
+            role="tab"
+            id="Tab-{{ block.id }}"
+            aria-controls="TabPanel-{{ block.id }}"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+            tabindex="{% if forloop.first %}0{% else %}-1{% endif %}"
+            class="collection-tabs__tab"
+            {{ block.shopify_attributes }}
+          >
+            {{- tab_label -}}
+          </button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- for block in section.blocks -%}
+    {%- assign collection = block.settings.collection -%}
+    <div
+      class="collection-tabs__panel"
+      id="TabPanel-{{ block.id }}"
+      {% if section.blocks.size > 1 %}
+        role="tabpanel" aria-labelledby="Tab-{{ block.id }}"
+      {% endif %}
+      {% unless forloop.first %}
+        hidden
+      {% endunless %}
+    >
+      <ul class="product-grid" role="list">
+        {%- if collection != blank and collection.products_count > 0 -%}
+          {%- for product in collection.products limit: section.settings.products_to_show -%}
+            <li>{% render 'product-card', product: product, show_quick_add: section.settings.show_quick_add %}</li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..4) -%}
+            <li>
+              <article class="product-card">
+                <div class="product-card__media">{{ 'product-4' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}</div>
+                <div class="product-card__info">
+                  <h3 class="product-card__title">{{ 'onboarding.product_title' | t }}</h3>
+                  <span class="price">{{ 4990 | money }}</span>
+                </div>
+              </article>
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+
+      {%- if collection != blank -%}
+        <div class="collection-tabs__footer">
+          <a href="{{ collection.url }}" class="button button--secondary">
+            {{- 'header.shop_title' | t: title: collection.title -}}
+          </a>
+        </div>
+      {%- endif -%}
+    </div>
+  {%- endfor -%}
+</div>
+
+{% stylesheet %}
+  .collection-tabs__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .collection-tabs__list {
+    display: flex;
+    gap: 1.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    max-width: 100%;
+  }
+
+  .collection-tabs__tab {
+    flex: none;
+    padding: 0.25rem 0;
+    border: 0;
+    border-bottom: 1px solid transparent;
+    background: none;
+    color: var(--color-foreground);
+    font-size: 1rem;
+    text-transform: lowercase;
+    cursor: pointer;
+  }
+
+  .collection-tabs__tab[aria-selected='true'] {
+    color: var(--color-heading);
+    border-color: currentcolor;
+  }
+
+  .collection-tabs__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.5rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Coleções em abas",
+  "class": "section-collection-tabs",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Compre por categoria"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Produtos por aba",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "columns",
+      "min": 2,
+      "max": 5,
+      "step": 1,
+      "label": "Colunas no desktop",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_quick_add",
+      "label": "Mostrar botão de adicionar",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Aba",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Coleção"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Nome da aba",
+          "info": "Opcional. Usa o nome da coleção por padrão."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Coleções em abas",
+      "blocks": [
+        { "type": "tab", "settings": { "label": "destaques" } },
+        { "type": "tab", "settings": { "label": "skincare" } },
+        { "type": "tab", "settings": { "label": "maquiagem" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

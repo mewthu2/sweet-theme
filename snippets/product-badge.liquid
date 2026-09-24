@@ -1,0 +1,47 @@
+{% doc %}
+  Renders a small label for a product. Uses the `custom.badge` metafield,
+  then a tag prefixed with `badge:` (e.g. `badge:novo`), then a sale label.
+
+  @param {product} product - The product
+  @param {string} [class] - Optional class
+
+  @example
+  {% render 'product-badge', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign label = product.metafields.custom.badge.value
+  if label == blank
+    for tag in product.tags
+      assign prefix = tag | slice: 0, 6 | downcase
+      if prefix == 'badge:'
+        assign label = tag | remove_first: 'badge:' | remove_first: 'Badge:' | strip
+        break
+      endif
+    endfor
+  endif
+  if label == blank and product.compare_at_price > product.price
+    assign label = 'products.on_sale' | t
+  endif
+  if label == blank and product.available == false
+    assign label = 'products.sold_out' | t
+  endif
+-%}
+
+{%- if label != blank -%}
+  <span class="badge {{ class }}">{{ label }}</span>
+{%- endif -%}
+
+{% stylesheet %}
+  .badge {
+    display: inline-block;
+    padding: 0.3em 0.7em;
+    background: var(--color-accent);
+    color: var(--color-heading);
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    line-height: 1.2;
+  }
+{% endstylesheet %}

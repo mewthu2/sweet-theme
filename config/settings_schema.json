@@ -1,0 +1,224 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Sweet",
+    "theme_version": "1.0.0",
+    "theme_author": "Sweet Sixteen",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://www.sweetsixteen.com.br/"
+  },
+  {
+    "name": "Logo",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 60,
+        "max": 300,
+        "step": 5,
+        "unit": "px",
+        "label": "Largura do logo (desktop)",
+        "default": 140
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
+      }
+    ]
+  },
+  {
+    "name": "Cores",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Paleta Sweet Sixteen"
+      },
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Fundo",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Texto",
+        "default": "#747C6C"
+      },
+      {
+        "type": "color",
+        "id": "color_heading",
+        "label": "Títulos",
+        "default": "#244930"
+      },
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primária (botões, destaques)",
+        "default": "#244930"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_contrast",
+        "label": "Texto sobre a primária",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Destaque (creme)",
+        "default": "#EEEDBC"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Fundo das imagens de produto",
+        "default": "#F6F6E9"
+      },
+      {
+        "type": "color",
+        "id": "color_border",
+        "label": "Bordas",
+        "default": "#E8E8EA"
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Preço promocional",
+        "default": "#CC4845"
+      }
+    ]
+  },
+  {
+    "name": "Tipografia",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Fonte dos títulos",
+        "default": "poppins_n5"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Fonte do texto",
+        "default": "poppins_n4"
+      },
+      {
+        "type": "select",
+        "id": "product_title_case",
+        "label": "Nome dos produtos",
+        "options": [
+          { "value": "lowercase", "label": "minúsculas" },
+          { "value": "uppercase", "label": "MAIÚSCULAS" },
+          { "value": "none", "label": "Como cadastrado" }
+        ],
+        "default": "lowercase"
+      },
+      {
+        "type": "range",
+        "id": "body_font_size",
+        "min": 12,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "label": "Tamanho base do texto",
+        "default": 14
+      }
+    ]
+  },
+  {
+    "name": "Layout",
+    "settings": [
+      {
+        "type": "select",
+        "id": "max_page_width",
+        "label": "Largura da página",
+        "options": [
+          { "value": "90rem", "label": "Estreita" },
+          { "value": "120rem", "label": "Larga" }
+        ],
+        "default": "120rem"
+      },
+      {
+        "type": "range",
+        "id": "min_page_margin",
+        "min": 10,
+        "max": 60,
+        "step": 1,
+        "unit": "px",
+        "label": "Margem lateral",
+        "default": 20
+      },
+      {
+        "type": "range",
+        "id": "button_radius",
+        "min": 0,
+        "max": 40,
+        "step": 1,
+        "unit": "px",
+        "label": "Arredondamento dos botões",
+        "default": 0
+      },
+      {
+        "type": "range",
+        "id": "input_corner_radius",
+        "min": 0,
+        "max": 20,
+        "step": 1,
+        "unit": "px",
+        "label": "Arredondamento dos campos",
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "Carrinho",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Ao adicionar ao carrinho",
+        "options": [
+          { "value": "drawer", "label": "Abrir gaveta lateral" },
+          { "value": "page", "label": "Ir para a página do carrinho" }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "text",
+        "id": "free_shipping_threshold",
+        "label": "Frete grátis a partir de (R$)",
+        "info": "Deixe vazio para ocultar a barra de progresso. Ex.: 299",
+        "default": "299"
+      }
+    ]
+  },
+  {
+    "name": "Redes sociais",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram",
+        "default": "https://www.instagram.com/"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube"
+      }
+    ]
+  }
+]

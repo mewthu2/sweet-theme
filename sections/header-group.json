@@ -1,0 +1,31 @@
+{
+  "type": "header",
+  "name": "t:general.header",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "message-1": { "type": "message", "settings": { "text": "Frete grátis para compras acima de R$ 299" } },
+        "message-2": { "type": "message", "settings": { "text": "Parcele em até 6x sem juros" } }
+      },
+      "block_order": ["message-1", "message-2"],
+      "settings": {
+        "background": "#244930",
+        "foreground": "#EEEDBC",
+        "speed": 5
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "menu": "main-menu",
+        "mega_menu_products": 5,
+        "logo_position": "center",
+        "sticky": true,
+        "background": "#FFFFFF",
+        "foreground": "#244930"
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}

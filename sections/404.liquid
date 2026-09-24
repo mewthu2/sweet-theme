@@ -1,0 +1,25 @@
+<div class="not-found section-spacing">
+  <p class="eyebrow">{{ '404.title' | t }}</p>
+  <h1>{{ '404.not_found' | t }}</h1>
+  <a href="{{ routes.all_products_collection_url }}" class="button">
+    {{- '404.back_to_shopping' | t -}}
+  </a>
+</div>
+
+{% stylesheet %}
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    padding-block: 8rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "t:general.404",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,52 @@
+{% doc %}
+  Renders a progress bar towards the free shipping threshold set in theme settings.
+
+  @example
+  {% render 'free-shipping-bar' %}
+{% enddoc %}
+
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | remove: 'R$' | remove: ' ' | replace: ',', '.' | times: 100 | round
+-%}
+
+{%- if threshold > 0 and cart.item_count > 0 -%}
+  {%- liquid
+    assign remaining = threshold | minus: cart.total_price
+    assign remaining_money = remaining | money
+    assign progress = cart.total_price | times: 100 | divided_by: threshold | at_most: 100
+  -%}
+  <div class="free-shipping">
+    <p class="free-shipping__text">
+      {%- if remaining > 0 -%}
+        {{ 'cart.free_shipping_remaining_html' | t: amount: remaining_money }}
+      {%- else -%}
+        {{ 'cart.free_shipping_unlocked' | t }}
+      {%- endif -%}
+    </p>
+    <div class="free-shipping__track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ progress }}">
+      <span class="free-shipping__fill" style="width: {{ progress }}%"></span>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .free-shipping {
+    display: grid;
+    gap: 0.5rem;
+    font-size: 0.8125rem;
+    color: var(--color-heading);
+  }
+
+  .free-shipping__track {
+    height: 4px;
+    background: var(--color-accent);
+    overflow: hidden;
+  }
+
+  .free-shipping__fill {
+    display: block;
+    height: 100%;
+    background: var(--color-primary);
+    transition: width 0.4s var(--ease);
+  }
+{% endstylesheet %}

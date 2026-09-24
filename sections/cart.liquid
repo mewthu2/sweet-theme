@@ -1,0 +1,120 @@
+<div class="cart-page section-spacing">
+  <h1 class="cart-page__title">{{ 'cart.title' | t }}</h1>
+
+  {%- if cart.item_count > 0 -%}
+    <div class="cart-page__layout">
+      <div class="cart-page__items">
+        {% render 'cart-line-items' %}
+      </div>
+
+      <aside class="cart-page__summary">
+        {% render 'free-shipping-bar' %}
+        <form action="{{ routes.cart_url }}" method="post" class="cart-page__form">
+          {%- if section.settings.show_note -%}
+            <label for="CartNote" class="cart-page__label">{{ 'cart.note' | t }}</label>
+            <textarea id="CartNote" name="note" class="field" rows="3">{{ cart.note }}</textarea>
+          {%- endif -%}
+          {%- for discount in cart.cart_level_discount_applications -%}
+            <div class="cart-page__line">
+              <span>{{ discount.title }}</span>
+              <span>-{{ discount.total_allocated_amount | money }}</span>
+            </div>
+          {%- endfor -%}
+          <div class="cart-page__line cart-page__line--total">
+            <span>{{ 'cart.subtotal' | t }}</span>
+            <span>{{ cart.total_price | money }}</span>
+          </div>
+          <p class="cart-page__note">{{ 'cart.taxes_and_shipping' | t }}</p>
+          <button type="submit" name="checkout" class="button button--full">{{ 'cart.checkout' | t }}</button>
+          {%- if additional_checkout_buttons -%}
+            <div class="cart-page__additional">{{ content_for_additional_checkout_buttons }}</div>
+          {%- endif -%}
+        </form>
+      </aside>
+    </div>
+  {%- else -%}
+    <div class="cart-page__empty">
+      <p>{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="button">{{ 'cart.continue_shopping' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .cart-page__title {
+    margin-bottom: 2rem;
+  }
+
+  .cart-page__layout {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  @media (min-width: 990px) {
+    .cart-page__layout {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+      align-items: start;
+      gap: 4rem;
+    }
+
+    .cart-page__summary {
+      position: sticky;
+      top: calc(var(--header-height) + 2rem);
+    }
+  }
+
+  .cart-page__summary {
+    display: grid;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: var(--color-surface);
+  }
+
+  .cart-page__form {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .cart-page__label {
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-heading);
+  }
+
+  .cart-page__line {
+    display: flex;
+    justify-content: space-between;
+    color: var(--color-heading);
+  }
+
+  .cart-page__line--total {
+    font-size: 1.0625rem;
+    font-weight: 500;
+  }
+
+  .cart-page__note {
+    font-size: 0.75rem;
+  }
+
+  .cart-page__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Carrinho",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_note",
+      "label": "Permitir observação no pedido",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,38 @@
+{% doc %}
+  Renders an inline SVG icon.
+
+  @param {string} name - Icon name: close, menu, search, account, bag, plus, minus, chevron-down, arrow-left, arrow-right, instagram, tiktok, youtube
+  @param {string} [class] - Optional class for the svg element
+
+  @example
+  {% render 'icon', name: 'close' %}
+{% enddoc %}
+
+{%- case name -%}
+  {%- when 'close' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 4l12 12M16 4L4 16"/></svg>
+  {%- when 'menu' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 6h18M2 11h18M2 16h18"/></svg>
+  {%- when 'search' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="8.5" cy="8.5" r="6"/><path d="M13 13l5 5"/></svg>
+  {%- when 'account' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="10" cy="6.5" r="3.5"/><path d="M3 18c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>
+  {%- when 'bag' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3.5 6.5h13l-1 11h-11z"/><path d="M7 8V5a3 3 0 016 0v3"/></svg>
+  {%- when 'plus' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M7 1v12M1 7h12"/></svg>
+  {%- when 'minus' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M1 7h12"/></svg>
+  {%- when 'chevron-down' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M2 4l4 4 4-4"/></svg>
+  {%- when 'arrow-left' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M17 10H3M8 5l-5 5 5 5"/></svg>
+  {%- when 'arrow-right' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M3 10h14M12 5l5 5-5 5"/></svg>
+  {%- when 'instagram' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="2.5" y="2.5" width="15" height="15" rx="4"/><circle cx="10" cy="10" r="3.5"/><circle cx="14.6" cy="5.4" r=".6" fill="currentColor"/></svg>
+  {%- when 'tiktok' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M11.5 2.5v10.2a3 3 0 11-3-3M11.5 2.5c.3 2.3 1.9 3.9 4.5 4.1"/></svg>
+  {%- when 'youtube' -%}
+    <svg class="icon {{ class }}" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.3"><rect x="1.5" y="4" width="17" height="12" rx="3"/><path d="M8.5 7.5v5l4-2.5z" fill="currentColor"/></svg>
+{%- endcase -%}

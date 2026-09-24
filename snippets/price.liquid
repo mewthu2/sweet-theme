@@ -1,0 +1,62 @@
+{% doc %}
+  Renders a product or variant price with compare-at price when on sale.
+
+  @param {product} product - The product
+  @param {variant} [variant] - Optional variant; defaults to the selected or first available variant
+  @param {string} [class] - Optional wrapper class
+
+  @example
+  {% render 'price', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign target = variant | default: product.selected_or_first_available_variant
+  assign price = target.price
+  assign compare_at = target.compare_at_price
+  assign show_from = false
+  if variant == blank and product.price_varies
+    assign price = product.price_min
+    assign compare_at = blank
+    assign show_from = true
+  endif
+-%}
+
+<div class="price {{ class }}{% if compare_at > price %} price--on-sale{% endif %}" data-price>
+  {%- if show_from -%}
+    <span class="price__from">{{ 'products.price_from' | t }}</span>
+  {%- endif -%}
+  <span class="price__regular">
+    <span class="visually-hidden">{{ 'products.price' | t }}</span>
+    {{- price | money -}}
+  </span>
+  {%- if compare_at > price -%}
+    <s class="price__compare">
+      <span class="visually-hidden">{{ 'products.compare_at_price' | t }}</span>
+      {{- compare_at | money -}}
+    </s>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .price {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.4em;
+    color: var(--color-heading);
+  }
+
+  .price__from {
+    font-size: 0.85em;
+    color: var(--color-foreground);
+  }
+
+  .price--on-sale .price__regular {
+    color: var(--color-sale);
+  }
+
+  .price__compare {
+    font-size: 0.85em;
+    color: var(--color-foreground);
+  }
+{% endstylesheet %}

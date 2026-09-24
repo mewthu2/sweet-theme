@@ -1,0 +1,106 @@
+<announcement-bar
+  class="announcement-bar full-width"
+  data-speed="{{ section.settings.speed }}"
+  style="--announcement-bg: {{ section.settings.background }}; --announcement-fg: {{ section.settings.foreground }};"
+>
+  {%- for block in section.blocks -%}
+    <p class="announcement-bar__message" data-announcement {% unless forloop.first %}hidden{% endunless %} {{ block.shopify_attributes }}>
+      {%- if block.settings.link != blank -%}
+        <a href="{{ block.settings.link }}">{{ block.settings.text }}</a>
+      {%- else -%}
+        {{ block.settings.text }}
+      {%- endif -%}
+    </p>
+  {%- endfor -%}
+</announcement-bar>
+
+{% stylesheet %}
+  .announcement-bar {
+    display: grid;
+    place-items: center;
+    min-height: 2.25rem;
+    padding: 0.5rem var(--page-margin);
+    background: var(--announcement-bg);
+    color: var(--announcement-fg);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+  .announcement-bar__message {
+    grid-area: 1 / 1;
+    animation: announcement-in 0.5s var(--ease);
+  }
+
+  .announcement-bar__message a {
+    text-decoration: none;
+  }
+
+  @keyframes announcement-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Barra de anúncios",
+  "class": "section-announcement",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "color",
+      "id": "background",
+      "label": "Fundo",
+      "default": "#244930"
+    },
+    {
+      "type": "color",
+      "id": "foreground",
+      "label": "Texto",
+      "default": "#EEEDBC"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Troca de mensagem a cada",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "message",
+      "name": "Mensagem",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Frete grátis para compras acima de R$ 299"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Barra de anúncios",
+      "blocks": [{ "type": "message" }]
+    }
+  ],
+  "enabled_on": {
+    "groups": ["header"]
+  }
+}
+{% endschema %}

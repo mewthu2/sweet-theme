@@ -1,0 +1,181 @@
+{%- liquid
+  assign collection = section.settings.collection
+  assign products_to_show = section.settings.products_to_show
+-%}
+
+<div class="product-swipe section-spacing" data-carousel>
+  <div class="section-heading product-swipe__heading">
+    <div>
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2>{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+    <div class="carousel-arrows">
+      <button type="button" class="carousel-arrow" data-carousel-prev>
+        {% render 'icon', name: 'arrow-left' %}
+        <span class="visually-hidden">{{ 'general.previous' | t }}</span>
+      </button>
+      <button type="button" class="carousel-arrow" data-carousel-next>
+        {% render 'icon', name: 'arrow-right' %}
+        <span class="visually-hidden">{{ 'general.next' | t }}</span>
+      </button>
+    </div>
+  </div>
+
+  <ul class="product-swipe__track" role="list" data-carousel-track>
+    {%- if collection != blank and collection.products_count > 0 -%}
+      {%- for product in collection.products limit: products_to_show -%}
+        <li class="product-swipe__slide">
+          {% render 'product-swipe-card', product: product %}
+        </li>
+      {%- endfor -%}
+    {%- else -%}
+      {%- for i in (1..4) -%}
+        <li class="product-swipe__slide">
+          <article class="swipe-card">
+            <div class="swipe-card__top"><span class="swipe-card__label">{{ 'onboarding.product_type' | t }}</span></div>
+            <div class="swipe-card__media">{{ 'product-3' | placeholder_svg_tag: 'placeholder-svg swipe-card__image' }}</div>
+            <div class="swipe-card__heading">
+              <h3 class="swipe-card__title">{{ 'onboarding.product_title' | t }}</h3>
+              <span class="swipe-card__price">{{ 4990 | money }}</span>
+            </div>
+            <span class="button button--full swipe-card__buy">{{ 'products.add_to_cart' | t }}</span>
+          </article>
+        </li>
+      {%- endfor -%}
+    {%- endif -%}
+  </ul>
+
+  {%- if section.settings.show_view_all and collection != blank -%}
+    <div class="product-swipe__footer">
+      <a href="{{ collection.url }}" class="button button--secondary">{{ 'products.view_all' | t }}</a>
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .product-swipe__heading {
+    align-items: flex-end;
+  }
+
+  .carousel-arrows {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .carousel-arrow {
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    background: var(--color-background);
+    color: var(--color-heading);
+    cursor: pointer;
+    transition: border-color 0.2s var(--ease), opacity 0.2s var(--ease);
+  }
+
+  .carousel-arrow:hover {
+    border-color: var(--color-heading);
+  }
+
+  .carousel-arrow:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+
+  .product-swipe__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    gap: 1rem;
+    margin: 0 calc(var(--page-margin) * -1);
+    padding: 0 var(--page-margin) 1rem;
+    list-style: none;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--page-margin);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-heading) var(--color-border);
+  }
+
+  .product-swipe__slide {
+    scroll-snap-align: start;
+  }
+
+  @media (min-width: 750px) {
+    .product-swipe__track {
+      grid-auto-columns: calc((100% - 1.25rem * 2) / 2.4);
+      gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 990px) {
+    .product-swipe__track {
+      grid-auto-columns: calc((100% - 1.25rem * 3) / 3.2);
+    }
+  }
+
+  @media (max-width: 749px) {
+    .carousel-arrows {
+      display: none;
+    }
+  }
+
+  .product-swipe__footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Carrossel de produtos",
+  "class": "section-product-swipe",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Chamada pequena",
+      "default": "arraste"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Os favoritos"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Coleção"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 3,
+      "max": 16,
+      "step": 1,
+      "label": "Quantidade de produtos",
+      "default": 8
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Mostrar botão \"ver tudo\"",
+      "default": false
+    }
+  ],
+  "presets": [
+    {
+      "name": "Carrossel de produtos"
+    }
+  ]
+}
+{% endschema %}

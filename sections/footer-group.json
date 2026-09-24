@@ -1,0 +1,26 @@
+{
+  "type": "footer",
+  "name": "t:general.footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-1": { "type": "menu", "settings": { "heading": "Loja", "menu": "main-menu" } },
+        "menu-2": { "type": "menu", "settings": { "heading": "Ajuda", "menu": "footer" } },
+        "text-1": { "type": "text", "settings": { "heading": "Atendimento", "text": "<p>Seg. a sex., 9h às 18h</p>" } }
+      },
+      "block_order": ["menu-1", "menu-2", "text-1"],
+      "settings": {
+        "background": "#E8E8EA",
+        "foreground": "#2E543B",
+        "show_newsletter": true,
+        "newsletter_heading": "entre para o clube sweet",
+        "show_payment_icons": true,
+        "legal_text": "SWEET COMERCIO LTDA",
+        "show_wordmark": true,
+        "wordmark": "sweet sixteen"
+      }
+    }
+  },
+  "order": ["footer"]
+}

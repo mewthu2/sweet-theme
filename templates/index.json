@@ -1,0 +1,64 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "height": "large",
+        "eyebrow": "Novo",
+        "heading": "Glow que conquista",
+        "text": "<p>Skincare e make pensados para a sua rotina.</p>",
+        "button_label": "Comprar agora",
+        "button_style": "button--light",
+        "content_position": "bottom-left",
+        "text_color": "#FFFFFF",
+        "overlay_opacity": 25
+      }
+    },
+    "swipe": {
+      "type": "product-swipe",
+      "settings": {
+        "eyebrow": "arraste",
+        "heading": "Os favoritos",
+        "products_to_show": 8,
+        "show_view_all": false
+      }
+    },
+    "tabs": {
+      "type": "collection-tabs",
+      "blocks": {
+        "tab-1": { "type": "tab", "settings": { "label": "destaques" } },
+        "tab-2": { "type": "tab", "settings": { "label": "skincare" } },
+        "tab-3": { "type": "tab", "settings": { "label": "maquiagem" } },
+        "tab-4": { "type": "tab", "settings": { "label": "kits" } }
+      },
+      "block_order": ["tab-1", "tab-2", "tab-3", "tab-4"],
+      "settings": {
+        "heading": "Compre por categoria",
+        "products_to_show": 8,
+        "columns": 4,
+        "show_quick_add": true
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "image-left",
+        "background": "#EEEDBC",
+        "eyebrow": "nossa história",
+        "heading": "Beleza leve, do seu jeito",
+        "text": "<p>Fórmulas pensadas para a pele jovem, com textura gostosa e resultado de verdade.</p>",
+        "button_label": "Conheça"
+      }
+    },
+    "statement": {
+      "type": "rich-text",
+      "settings": {
+        "background": "#FFFFFF",
+        "alignment": "center",
+        "heading": "Feito para a sua rotina",
+        "text": "<p>Produtos essenciais, fáceis de usar e com muito carinho em cada detalhe.</p>"
+      }
+    }
+  },
+  "order": ["hero", "swipe", "tabs", "story", "statement"]
+}
