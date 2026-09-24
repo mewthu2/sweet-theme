@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "type": "header",
   "name": "t:general.header",
@@ -8,13 +17,15 @@
         "message-1": {
           "type": "message",
           "settings": {
-            "text": "Frete grátis para compras acima de R$ 299"
+            "text": "Frete grátis para compras acima de R$ 299",
+            "link": ""
           }
         },
         "message-2": {
           "type": "message",
           "settings": {
-            "text": "Parcele em até 6x sem juros"
+            "text": "Parcele em até 6x sem juros",
+            "link": ""
           }
         }
       },
@@ -23,29 +34,19 @@
         "message-2"
       ],
       "settings": {
-        "background": "#244930",
-        "foreground": "#EEEDBC",
-        "speed": 5,
         "phone": "",
         "whatsapp": "",
         "whatsapp_label": "WhatsApp",
         "whatsapp_message": "Olá! Vim pelo site da Sweet Sixteen.",
-        "stores_label": "Ver lojas"
+        "stores_label": "Ver lojas",
+        "stores_link": "",
+        "background": "#244930",
+        "foreground": "#eeedbc",
+        "speed": 5
       }
     },
     "header": {
       "type": "header",
-      "settings": {
-        "logo_width": 140,
-        "logo_position": "center",
-        "transparent_mode": "auto",
-        "transparent_foreground": "#FFFFFF",
-        "background": "#FFFFFF",
-        "foreground": "#244930",
-        "sticky": true,
-        "menu": "main-menu",
-        "tab_products": 4
-      },
       "blocks": {
         "mega-shop": {
           "type": "mega_menu",
@@ -55,17 +56,32 @@
             "featured": "promos",
             "show_footer": true,
             "footer_text": "Frete grátis acima de R$ 299",
+            "collection": "",
             "products_limit": 3,
             "promo_1_heading": "Lançamentos",
             "promo_1_text": "Os novos queridinhos",
+            "promo_1_link": "",
             "promo_2_heading": "Kits",
-            "promo_2_text": "Presentes prontos"
+            "promo_2_text": "Presentes prontos",
+            "promo_2_link": ""
           }
         }
       },
       "block_order": [
         "mega-shop"
-      ]
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/Sweet_Sixteen_-_Logotipo_Principal_-_Fundo_Transparente_Escrito_Offwhite_e_Simbolo_Verde_Claro.png",
+        "logo_width": 140,
+        "logo_position": "center",
+        "transparent_mode": "auto",
+        "transparent_foreground": "#ffffff",
+        "background": "#ffffff",
+        "foreground": "#244930",
+        "sticky": true,
+        "menu": "main-menu",
+        "tab_products": 4
+      }
     }
   },
   "order": [
