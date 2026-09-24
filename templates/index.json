@@ -1,16 +1,27 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero",
       "settings": {
+        "image": "shopify://shop_images/2-slide-1783975882303-1362499165-b7566644338924a1da656f99970f082a1783975884-1920-1920.webp",
         "height": "large",
         "eyebrow": "Novo",
         "heading": "Glow que conquista",
         "text": "<p>Skincare e make pensados para a sua rotina.</p>",
         "button_label": "Comprar agora",
+        "button_link": "",
         "button_style": "button--light",
         "content_position": "bottom-left",
-        "text_color": "#FFFFFF",
+        "text_color": "#ffffff",
         "overlay_opacity": 25
       }
     },
@@ -19,6 +30,7 @@
       "settings": {
         "eyebrow": "arraste",
         "heading": "Os favoritos",
+        "collection": "",
         "products_to_show": 8,
         "show_view_all": false
       }
@@ -26,12 +38,41 @@
     "tabs": {
       "type": "collection-tabs",
       "blocks": {
-        "tab-1": { "type": "tab", "settings": { "label": "destaques" } },
-        "tab-2": { "type": "tab", "settings": { "label": "skincare" } },
-        "tab-3": { "type": "tab", "settings": { "label": "maquiagem" } },
-        "tab-4": { "type": "tab", "settings": { "label": "kits" } }
+        "tab-1": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "destaques"
+          }
+        },
+        "tab-2": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "skincare"
+          }
+        },
+        "tab-3": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "maquiagem"
+          }
+        },
+        "tab-4": {
+          "type": "tab",
+          "settings": {
+            "collection": "",
+            "label": "kits"
+          }
+        }
       },
-      "block_order": ["tab-1", "tab-2", "tab-3", "tab-4"],
+      "block_order": [
+        "tab-1",
+        "tab-2",
+        "tab-3",
+        "tab-4"
+      ],
       "settings": {
         "heading": "Compre por categoria",
         "products_to_show": 8,
@@ -43,22 +84,32 @@
       "type": "image-with-text",
       "settings": {
         "layout": "image-left",
-        "background": "#EEEDBC",
+        "background": "#eeedbc",
         "eyebrow": "nossa história",
         "heading": "Beleza leve, do seu jeito",
         "text": "<p>Fórmulas pensadas para a pele jovem, com textura gostosa e resultado de verdade.</p>",
-        "button_label": "Conheça"
+        "button_label": "Conheça",
+        "button_link": ""
       }
     },
     "statement": {
       "type": "rich-text",
       "settings": {
-        "background": "#FFFFFF",
+        "background": "#ffffff",
         "alignment": "center",
+        "eyebrow": "",
         "heading": "Feito para a sua rotina",
-        "text": "<p>Produtos essenciais, fáceis de usar e com muito carinho em cada detalhe.</p>"
+        "text": "<p>Produtos essenciais, fáceis de usar e com muito carinho em cada detalhe.</p>",
+        "button_label": "",
+        "button_link": ""
       }
     }
   },
-  "order": ["hero", "swipe", "tabs", "story", "statement"]
+  "order": [
+    "hero",
+    "swipe",
+    "tabs",
+    "story",
+    "statement"
+  ]
 }

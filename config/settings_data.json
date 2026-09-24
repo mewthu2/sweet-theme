@@ -8,5 +8,15 @@
  * ------------------------------------------------------------
  */
 {
-  "current": {}
+  "current": {
+    "logo": "shopify://shop_images/Sweet_Sixteen_-_Logotipo_Principal_-_Fundo_Transparente_Escrito_Offwhite_e_Simbolo_Verde_Claro.png",
+    "logo_width": 180,
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {}
+      }
+    },
+    "content_for_index": []
+  }
 }
