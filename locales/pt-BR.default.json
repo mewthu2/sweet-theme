@@ -72,7 +72,9 @@
     "menu": "Menu",
     "search": "Busca",
     "shop_title": "Ver {{ title }}",
-    "view_all": "Ver tudo"
+    "view_all": "Ver tudo",
+    "open_submenu": "Abrir submenu de {{ title }}",
+    "view_all_in": "Ver tudo em {{ title }}"
   },
   "newsletter": {
     "email": "Seu e-mail",
@@ -111,5 +113,9 @@
     "submit": "Buscar",
     "no_results_html": "Nenhum resultado para “{{ terms }}”",
     "results_for_html": "{{ count }} resultados para “{{ terms }}”"
+  },
+  "announcement": {
+    "call": "Ligar para a loja",
+    "whatsapp": "Conversar no WhatsApp"
   }
 }
