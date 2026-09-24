@@ -12,18 +12,33 @@
 {% enddoc %}
 
 {%- liquid
-  assign layout = 'columns'
+  assign layout = 'tabs'
   assign featured = 'none'
   assign products_limit = 3
   assign show_footer = true
+  assign button_label = 'header.shop_title' | t: title: link.title
   if block
     assign layout = block.settings.layout
     assign featured = block.settings.featured
     assign products_limit = block.settings.products_limit
     assign show_footer = block.settings.show_footer
+    if block.settings.button_label != blank
+      assign button_label = block.settings.button_label
+    endif
   endif
 
-  assign tab_products = tab_products | default: 4
+  assign tab_products = tab_products | default: 8
+
+  assign has_collections = false
+  for child in link.links
+    if child.type == 'collection_link'
+      assign has_collections = true
+      break
+    endif
+  endfor
+  if layout == 'tabs' and has_collections == false
+    assign layout = 'columns'
+  endif
 
   assign has_grandchildren = false
   for child in link.links
@@ -60,9 +75,9 @@
     data-block-id="{{ block.id }}" {{ block.shopify_attributes }}
   {% endif %}
 >
-  {%- if layout == 'tabs' and link.links != blank -%}
-    <div class="mega-menu__inner mega-menu__inner--tabs">
-      <div class="mega-menu__tabs" role="tablist" aria-orientation="vertical" data-tab-hover>
+  {%- if layout == 'tabs' -%}
+    <div class="mega-menu__inner">
+      <div class="mega-menu__tabs" role="tablist" data-tab-hover>
         {%- for child in link.links -%}
           <a
             href="{{ child.url }}"
@@ -71,7 +86,6 @@
             aria-controls="{{ panel_id }}-panel-{{ forloop.index }}"
             aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
             class="mega-menu__tab"
-            style="--i: {{ forloop.index0 }};"
           >
             {{- child.title -}}
           </a>
@@ -89,24 +103,38 @@
           {% endunless %}
         >
           {%- if child.type == 'collection_link' and child.object.products_count > 0 -%}
-            <ul class="mega-menu__products" role="list" style="--products: {{ tab_products }};">
-              {%- for product in child.object.products limit: tab_products -%}
-                <li>{% render 'product-card', product: product, sizes: '(min-width: 990px) 16vw, 25vw' %}</li>
-              {%- endfor -%}
-            </ul>
+            <div class="mega-menu__carousel" data-carousel>
+              <ul class="mega-menu__track" role="list" data-carousel-track>
+                {%- for product in child.object.products limit: tab_products -%}
+                  <li class="mega-menu__slide">
+                    {% render 'product-card', product: product, style: 'mini', sizes: '(min-width: 990px) 16vw, 25vw' %}
+                  </li>
+                {%- endfor -%}
+              </ul>
+              <button type="button" class="circle-button mega-menu__arrow mega-menu__arrow--prev" data-carousel-prev>
+                {% render 'icon', name: 'arrow-left' %}
+                <span class="visually-hidden">{{ 'general.previous' | t }}</span>
+              </button>
+              <button type="button" class="circle-button mega-menu__arrow mega-menu__arrow--next" data-carousel-next>
+                {% render 'icon', name: 'arrow-right' %}
+                <span class="visually-hidden">{{ 'general.next' | t }}</span>
+              </button>
+            </div>
           {%- elsif child.links != blank -%}
-            <ul class="mega-menu__list mega-menu__list--large" role="list">
+            <ul class="mega-menu__chips" role="list">
               {%- for grandchild in child.links -%}
-                <li><a href="{{ grandchild.url }}" class="mega-menu__link">{{ grandchild.title }}</a></li>
+                <li><a href="{{ grandchild.url }}" class="button">{{ grandchild.title }}</a></li>
               {%- endfor -%}
             </ul>
           {%- endif -%}
-          <a href="{{ child.url }}" class="mega-menu__more">
-            {{- 'header.shop_title' | t: title: child.title -}}
-            {% render 'icon', name: 'arrow-right' %}
-          </a>
         </div>
       {%- endfor -%}
+
+      {%- if show_footer -%}
+        <div class="mega-menu__actions">
+          <a href="{{ link.url }}" class="button">{{ button_label }}</a>
+        </div>
+      {%- endif -%}
     </div>
   {%- else -%}
     <div class="mega-menu__inner mega-menu__inner--columns{% if has_promos or has_products %} has-featured{% endif %}">
@@ -115,7 +143,7 @@
           {%- if has_grandchildren -%}
             <div class="mega-menu__columns" style="--columns: {{ column_count }};">
               {%- for child in link.links -%}
-                <div class="mega-menu__column" style="--i: {{ forloop.index0 }};">
+                <div class="mega-menu__column">
                   <a href="{{ child.url }}" class="mega-menu__heading">{{ child.title }}</a>
                   {%- if child.links != blank -%}
                     <ul class="mega-menu__list" role="list">
@@ -138,10 +166,9 @@
               {%- endfor -%}
             </div>
           {%- else -%}
-            <p class="mega-menu__eyebrow eyebrow">{{ link.title }}</p>
             <ul class="mega-menu__biglist" role="list">
               {%- for child in link.links -%}
-                <li style="--i: {{ forloop.index0 }};">
+                <li>
                   <a
                     href="{{ child.url }}"
                     class="mega-menu__biglink"
@@ -149,8 +176,7 @@
                       aria-current="page"
                     {% endif %}
                   >
-                    <span>{{ child.title }}</span>
-                    {% render 'icon', name: 'arrow-right' %}
+                    {{- child.title -}}
                   </a>
                 </li>
               {%- endfor -%}
@@ -160,7 +186,7 @@
       {%- endif -%}
 
       {%- if has_promos -%}
-        <div class="mega-menu__featured mega-menu__promos">
+        <div class="mega-menu__promos">
           {%- for i in (1..2) -%}
             {%- liquid
               assign image_key = 'promo_' | append: i | append: '_image'
@@ -173,7 +199,7 @@
               assign promo_link = block.settings[link_key] | default: link.url
             -%}
             {%- if promo_image != blank or promo_heading != blank -%}
-              <a href="{{ promo_link }}" class="mega-promo" style="--i: {{ i | plus: 2 }};">
+              <a href="{{ promo_link }}" class="mega-promo">
                 <span class="mega-promo__media">
                   {%- if promo_image != blank -%}
                     {{
@@ -184,44 +210,32 @@
                   {%- else -%}
                     {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg mega-promo__image' }}
                   {%- endif -%}
-                </span>
-                {%- if promo_heading != blank -%}
-                  <span class="mega-promo__title">
-                    {{- promo_heading -}}
-                    {% render 'icon', name: 'arrow-right' %}
+                  <span class="mega-promo__text">
+                    {%- if promo_heading != blank -%}
+                      <span class="mega-promo__title">{{ promo_heading }}</span>
+                    {%- endif -%}
+                    {%- if promo_text != blank -%}
+                      <span>{{ promo_text }}</span>
+                    {%- endif -%}
                   </span>
-                {%- endif -%}
-                {%- if promo_text != blank -%}
-                  <span class="mega-promo__text">{{ promo_text }}</span>
-                {%- endif -%}
+                </span>
               </a>
             {%- endif -%}
           {%- endfor -%}
         </div>
       {%- elsif has_products -%}
-        <div class="mega-menu__featured">
-          <p class="mega-menu__eyebrow eyebrow">{{ block.settings.collection.title }}</p>
-          <ul class="mega-menu__products" role="list" style="--products: {{ products_limit }};">
-            {%- for product in block.settings.collection.products limit: products_limit -%}
-              <li>{% render 'product-card', product: product, sizes: '(min-width: 990px) 14vw, 25vw' %}</li>
-            {%- endfor -%}
-          </ul>
+        <ul class="mega-menu__products" role="list" style="--products: {{ products_limit }};">
+          {%- for product in block.settings.collection.products limit: products_limit -%}
+            <li>{% render 'product-card', product: product, style: 'mini', sizes: '(min-width: 990px) 14vw, 25vw' %}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+
+      {%- if show_footer -%}
+        <div class="mega-menu__actions">
+          <a href="{{ link.url }}" class="button">{{ button_label }}</a>
         </div>
       {%- endif -%}
-    </div>
-  {%- endif -%}
-
-  {%- if show_footer -%}
-    <div class="mega-menu__footer">
-      <div class="mega-menu__footer-inner">
-        <a href="{{ link.url }}" class="mega-menu__more">
-          {{- 'header.view_all_in' | t: title: link.title -}}
-          {% render 'icon', name: 'arrow-right' %}
-        </a>
-        {%- if block.settings.footer_text != blank -%}
-          <span class="mega-menu__footer-text">{{ block.settings.footer_text }}</span>
-        {%- endif -%}
-      </div>
     </div>
   {%- endif -%}
 </div>
@@ -232,78 +246,135 @@
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--header-bg);
-    color: var(--color-foreground);
-    box-shadow: inset 0 1px 0 var(--color-border), 0 1px 0 var(--color-border);
-    opacity: 0;
+    border-radius: 0 0 var(--radius) var(--radius);
+    background: var(--color-surface);
+    color: var(--color-heading);
+    clip-path: inset(0 0 100% 0);
     visibility: hidden;
-    transform: translateY(-8px);
-    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease), visibility 0s linear 0.28s;
-  }
-
-  .mega-menu::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    height: 100vh;
-    background: var(--color-overlay);
-    pointer-events: none;
+    transition: clip-path 0.4s var(--ease), visibility 0s linear 0.4s;
   }
 
   .site-nav__item.is-open > .mega-menu {
-    opacity: 1;
+    clip-path: inset(0 0 -1px 0);
     visibility: visible;
-    transform: none;
-    transition: opacity 0.28s var(--ease), transform 0.28s var(--ease), visibility 0s;
+    transition: clip-path 0.45s var(--ease), visibility 0s;
   }
 
   .mega-menu__inner {
-    width: min(var(--page-width), 100%);
+    display: grid;
+    gap: 2.5rem;
+    padding: 0.5rem clamp(1.5rem, 1rem + 2vw, 2rem) 2.25rem;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
+  }
+
+  .site-nav__item.is-open .mega-menu__inner {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.12s;
+  }
+
+  .mega-menu__tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem 3rem;
+  }
+
+  .mega-menu__tab {
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid transparent;
+    color: var(--color-muted);
+    font-size: 1rem;
+    font-weight: var(--font-bold--weight);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    text-decoration: none;
+    opacity: 0.6;
+    transition: color 0.2s var(--ease), opacity 0.2s var(--ease), border-color 0.2s var(--ease);
+  }
+
+  .mega-menu__tab:hover,
+  .mega-menu__tab[aria-selected='true'] {
+    color: var(--color-heading);
+    opacity: 1;
+  }
+
+  .mega-menu__tab[aria-selected='true'] {
+    border-color: currentcolor;
+  }
+
+  .mega-menu__tab-panel {
+    animation: mega-fade 0.35s var(--ease);
+  }
+
+  .mega-menu__carousel {
+    position: relative;
+    width: min(100%, 64rem);
     margin-inline: auto;
-    padding: 2.5rem var(--page-margin) 2.75rem;
+  }
+
+  .mega-menu__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: calc((100% - 3rem) / 4);
+    gap: 1rem;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .mega-menu__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mega-menu__slide {
+    scroll-snap-align: start;
+  }
+
+  .mega-menu__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .mega-menu__arrow:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+
+  .mega-menu__arrow--prev {
+    left: -4.5rem;
+  }
+
+  .mega-menu__arrow--next {
+    right: -4.5rem;
+  }
+
+  .mega-menu__chips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mega-menu__actions {
+    display: flex;
+    justify-content: center;
+    grid-column: 1 / -1;
   }
 
   .mega-menu__inner--columns {
-    display: grid;
-    gap: 3rem;
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 1.5rem;
   }
 
   .mega-menu__inner--columns.has-featured {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
-  }
-
-  .mega-menu__inner--tabs {
-    display: grid;
-    grid-template-columns: 15rem minmax(0, 1fr);
-    gap: 3rem;
-  }
-
-  .mega-menu__column,
-  .mega-menu__biglist li,
-  .mega-menu__tab,
-  .mega-promo,
-  .mega-menu__featured > * {
-    opacity: 0;
-    transform: translateY(6px);
-    transition: opacity 0.35s var(--ease), transform 0.35s var(--ease);
-    transition-delay: 0s;
-  }
-
-  .site-nav__item.is-open .mega-menu__column,
-  .site-nav__item.is-open .mega-menu__biglist li,
-  .site-nav__item.is-open .mega-menu__tab,
-  .site-nav__item.is-open .mega-promo,
-  .site-nav__item.is-open .mega-menu__featured > * {
-    opacity: 1;
-    transform: none;
-    transition-delay: calc(var(--i, 0) * 40ms + 60ms);
-  }
-
-  .mega-menu__eyebrow {
-    margin-bottom: 1.25rem;
-    color: var(--color-foreground);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
   }
 
   .mega-menu__columns {
@@ -315,31 +386,20 @@
   .mega-menu__heading {
     display: inline-block;
     margin-bottom: 1rem;
-    color: var(--color-heading);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
+    font-weight: var(--font-bold--weight);
     text-transform: uppercase;
     text-decoration: none;
   }
 
   .mega-menu__list {
     display: grid;
-    gap: 0.6rem;
+    gap: 0.75rem;
     padding: 0;
     list-style: none;
   }
 
-  .mega-menu__list--large .mega-menu__link {
-    font-size: 1.125rem;
-  }
-
   .mega-menu__link {
-    position: relative;
-    color: var(--color-heading);
-    font-size: 0.9375rem;
     text-decoration: none;
-    text-transform: lowercase;
     background: linear-gradient(currentcolor, currentcolor) 0 100% / 0 1px no-repeat;
     transition: background-size 0.3s var(--ease);
   }
@@ -353,42 +413,25 @@
     display: grid;
     padding: 0;
     list-style: none;
-    border-top: 1px solid var(--color-border);
   }
 
   .mega-menu__biglink {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    padding-block: 0.8rem;
+    display: block;
+    padding-block: 0.9rem;
     border-bottom: 1px solid var(--color-border);
-    color: var(--color-heading);
-    font-family: var(--font-heading--family);
     font-size: clamp(1.25rem, 0.9rem + 0.8vw, 1.75rem);
+    font-weight: var(--font-bold--weight);
     line-height: 1.2;
     text-decoration: none;
     text-transform: lowercase;
+    opacity: 0.55;
+    transition: opacity 0.2s var(--ease), padding 0.3s var(--ease);
   }
 
-  .mega-menu__biglink span {
-    transition: transform 0.3s var(--ease);
-  }
-
-  .mega-menu__biglink .icon {
-    opacity: 0;
-    transform: translateX(-8px);
-    transition: opacity 0.3s var(--ease), transform 0.3s var(--ease);
-  }
-
-  .mega-menu__biglink:hover span,
-  .mega-menu__biglink[aria-current] span {
-    transform: translateX(0.5rem);
-  }
-
-  .mega-menu__biglink:hover .icon {
+  .mega-menu__biglink:hover,
+  .mega-menu__biglink[aria-current] {
     opacity: 1;
-    transform: none;
+    padding-left: 0.5rem;
   }
 
   .mega-menu__promos {
@@ -398,10 +441,8 @@
   }
 
   .mega-promo {
-    display: flex;
-    flex-direction: column;
-    gap: 0.35rem;
-    color: var(--color-heading);
+    display: block;
+    color: #fff;
     text-decoration: none;
   }
 
@@ -409,9 +450,9 @@
     position: relative;
     display: block;
     aspect-ratio: 4 / 5;
-    margin-bottom: 0.5rem;
     overflow: hidden;
-    background: var(--color-surface);
+    border-radius: var(--radius-small);
+    background: var(--color-card);
   }
 
   .mega-promo__image {
@@ -427,109 +468,28 @@
     transform: scale(1.04);
   }
 
-  .mega-promo__title {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-  }
-
-  .mega-promo__title .icon {
-    width: 0.9rem;
-    transition: transform 0.3s var(--ease);
-  }
-
-  .mega-promo:hover .mega-promo__title .icon {
-    transform: translateX(4px);
-  }
-
   .mega-promo__text {
-    font-size: 0.8125rem;
-    color: var(--color-foreground);
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: grid;
+    gap: 0.15rem;
+    padding: 1.25rem;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.35), transparent);
+  }
+
+  .mega-promo__title {
+    font-weight: var(--font-bold--weight);
+    text-transform: uppercase;
   }
 
   .mega-menu__products {
     display: grid;
-    grid-template-columns: repeat(var(--products, 4), minmax(0, 1fr));
+    grid-template-columns: repeat(var(--products, 3), minmax(0, 1fr));
     gap: 1rem;
     padding: 0;
     list-style: none;
-  }
-
-  .mega-menu__tabs {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    border-right: 1px solid var(--color-border);
-    padding-right: 2rem;
-  }
-
-  .mega-menu__tab {
-    padding-block: 0.3rem;
-    color: var(--color-foreground);
-    font-family: var(--font-heading--family);
-    font-size: 1.25rem;
-    text-decoration: none;
-    text-transform: lowercase;
-    transition: color 0.2s var(--ease), padding 0.3s var(--ease);
-  }
-
-  .mega-menu__tab[aria-selected='true'] {
-    color: var(--color-heading);
-    padding-left: 0.75rem;
-    box-shadow: inset 2px 0 0 var(--color-primary);
-  }
-
-  .mega-menu__tab-panel {
-    display: grid;
-    gap: 1.5rem;
-    align-content: start;
-    animation: mega-fade 0.35s var(--ease);
-  }
-
-  .mega-menu__more {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    justify-self: start;
-    color: var(--color-heading);
-    font-size: 0.6875rem;
-    font-weight: 500;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    text-decoration: none;
-  }
-
-  .mega-menu__more .icon {
-    width: 0.9rem;
-    transition: transform 0.3s var(--ease);
-  }
-
-  .mega-menu__more:hover .icon {
-    transform: translateX(4px);
-  }
-
-  .mega-menu__footer {
-    background: var(--color-accent);
-  }
-
-  .mega-menu__footer-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    width: min(var(--page-width), 100%);
-    min-height: 3rem;
-    margin-inline: auto;
-    padding: 0.75rem var(--page-margin);
-  }
-
-  .mega-menu__footer-text {
-    color: var(--color-heading);
-    font-size: 0.75rem;
   }
 
   @keyframes mega-fade {

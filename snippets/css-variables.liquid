@@ -5,43 +5,65 @@
   {% render 'css-variables' %}
 {% enddoc %}
 
+{%- liquid
+  assign system_stack = '"Helvetica Neue", Helvetica, Arial, system-ui, sans-serif'
+  if settings.body_font_source == 'picker'
+    assign body_family = settings.type_body_font.family | append: ', ' | append: settings.type_body_font.fallback_families
+  else
+    assign body_family = system_stack
+  endif
+-%}
+
 {% style %}
-  {{ settings.type_body_font | font_face: font_display: 'swap' }}
-  {{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
-  {{ settings.type_body_font | font_modify: 'weight', '500' | font_face: font_display: 'swap' }}
-  {{ settings.type_body_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
-  {{ settings.type_heading_font | font_face: font_display: 'swap' }}
-  {{ settings.type_heading_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+  {%- if settings.body_font_source == 'picker' -%}
+    {{ settings.type_body_font | font_face: font_display: 'swap' }}
+    {{ settings.type_body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+    {{ settings.type_body_font | font_modify: 'style', 'italic' | font_face: font_display: 'swap' }}
+  {%- endif -%}
+  {{ settings.type_display_font | font_face: font_display: 'swap' }}
 
   :root {
-    --font-body--family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
-    --font-body--style: {{ settings.type_body_font.style }};
-    --font-body--weight: {{ settings.type_body_font.weight }};
-    --font-heading--family: {{ settings.type_heading_font.family }}, {{ settings.type_heading_font.fallback_families }};
-    --font-heading--style: {{ settings.type_heading_font.style }};
-    --font-heading--weight: {{ settings.type_heading_font.weight }};
+    --font-body--family: {{ body_family }};
+    --font-body--weight: 400;
+    --font-bold--weight: 700;
+    --font-heading--family: var(--font-body--family);
+    --font-heading--weight: 700;
+    --font-heading--style: normal;
+    --font-display--family: {{ settings.type_display_font.family }}, {{ settings.type_display_font.fallback_families }};
+    --font-display--weight: {{ settings.type_display_font.weight }};
     --font-size-base: {{ settings.body_font_size }}px;
-    --product-title-case: {{ settings.product_title_case }};
 
-    --page-width: {{ settings.max_page_width }};
-    --page-margin: {{ settings.min_page_margin }}px;
+    --page-width: 100%;
+    --page-margin: clamp(16px, 2.25vw, {{ settings.page_margin }}px);
+    --section-gap: clamp(16px, 2.25vw, {{ settings.section_gap }}px);
+    --radius: {{ settings.card_radius }}px;
+    --radius-small: {{ settings.card_radius | times: 0.67 | round }}px;
 
     --color-background: {{ settings.color_background }};
     --color-foreground: {{ settings.color_text }};
-    --color-heading: {{ settings.color_heading }};
+    --color-heading: {{ settings.color_text }};
+    --color-muted: {{ settings.color_muted }};
+    --color-surface: {{ settings.color_surface }};
+    --color-card: {{ settings.color_card }};
     --color-primary: {{ settings.color_primary }};
     --color-primary-hover: {{ settings.color_primary | color_darken: 6 }};
     --color-primary-contrast: {{ settings.color_primary_contrast }};
     --color-accent: {{ settings.color_accent }};
-    --color-surface: {{ settings.color_surface }};
-    --color-border: {{ settings.color_border }};
+    --color-border: {{ settings.color_text | color_modify: 'alpha', 0.22 }};
+    --color-border-soft: {{ settings.color_text | color_modify: 'alpha', 0.1 }};
     --color-sale: {{ settings.color_sale }};
-    --color-overlay: {{ settings.color_heading | color_modify: 'alpha', 0.35 }};
+    --color-overlay: {{ settings.color_text | color_modify: 'alpha', 0.3 }};
 
     --style-border-radius-buttons: {{ settings.button_radius }}px;
-    --style-border-radius-inputs: {{ settings.input_corner_radius }}px;
+    --style-border-radius-inputs: var(--radius-small);
 
-    --header-height: 64px;
+    --header-height: 96px;
     --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  @media (max-width: 989px) {
+    :root {
+      --header-height: 64px;
+    }
   }
 {% endstyle %}

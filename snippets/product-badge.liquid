@@ -1,6 +1,6 @@
 {% doc %}
-  Renders a small label for a product. Uses the `custom.badge` metafield,
-  then a tag prefixed with `badge:` (e.g. `badge:novo`), then a sale label.
+  Renders a product badge. Uses the `custom.badge_image` metafield (award seal),
+  then `custom.badge`, then a tag prefixed with `badge:` (e.g. `badge:novo`), then a sale label.
 
   @param {product} product - The product
   @param {string} [class] - Optional class
@@ -10,6 +10,7 @@
 {% enddoc %}
 
 {%- liquid
+  assign badge_image = product.metafields.custom.badge_image.value
   assign label = product.metafields.custom.badge.value
   if label == blank
     for tag in product.tags
@@ -28,20 +29,18 @@
   endif
 -%}
 
-{%- if label != blank -%}
-  <span class="badge {{ class }}">{{ label }}</span>
+{%- if badge_image -%}
+  <span class="badge-seal {{ class }}">
+    {{ badge_image | image_url: width: 120 | image_tag: width: 48, height: 48, loading: 'lazy', alt: label }}
+  </span>
+{%- elsif label != blank -%}
+  <span class="pill {{ class }}">{{ label }}</span>
 {%- endif -%}
 
 {% stylesheet %}
-  .badge {
-    display: inline-block;
-    padding: 0.3em 0.7em;
-    background: var(--color-accent);
-    color: var(--color-heading);
-    font-size: 0.625rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    line-height: 1.2;
+  .badge-seal img {
+    width: 3rem;
+    height: 3rem;
+    object-fit: contain;
   }
 {% endstylesheet %}

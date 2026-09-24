@@ -2,20 +2,10 @@
   {
     "name": "theme_info",
     "theme_name": "Sweet",
-    "theme_version": "1.0.0",
+    "theme_version": "2.0.0",
     "theme_author": "Sweet Sixteen",
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://www.sweetsixteen.com.br/"
-  },
-  {
-    "name": "Favicon",
-    "settings": [
-      {
-        "type": "image_picker",
-        "id": "favicon",
-        "label": "Favicon"
-      }
-    ]
   },
   {
     "name": "Cores",
@@ -27,31 +17,44 @@
       {
         "type": "color",
         "id": "color_background",
-        "label": "Fundo",
+        "label": "Fundo da página",
         "default": "#FFFFFF"
       },
       {
         "type": "color",
         "id": "color_text",
-        "label": "Texto",
-        "default": "#747C6C"
-      },
-      {
-        "type": "color",
-        "id": "color_heading",
-        "label": "Títulos",
+        "label": "Texto, títulos e ícones",
         "default": "#244930"
       },
       {
         "type": "color",
+        "id": "color_muted",
+        "label": "Texto secundário",
+        "info": "Abas inativas, estrelas, observações.",
+        "default": "#747C6C"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Fundo dos cards (seções)",
+        "default": "#F3F2E7"
+      },
+      {
+        "type": "color",
+        "id": "color_card",
+        "label": "Fundo dos cards de produto",
+        "default": "#F6F6F1"
+      },
+      {
+        "type": "color",
         "id": "color_primary",
-        "label": "Primária (botões, destaques)",
+        "label": "Botão principal",
         "default": "#244930"
       },
       {
         "type": "color",
         "id": "color_primary_contrast",
-        "label": "Texto sobre a primária",
+        "label": "Texto do botão principal",
         "default": "#FFFFFF"
       },
       {
@@ -59,18 +62,6 @@
         "id": "color_accent",
         "label": "Destaque (creme)",
         "default": "#EEEDBC"
-      },
-      {
-        "type": "color",
-        "id": "color_surface",
-        "label": "Fundo das imagens de produto",
-        "default": "#F6F6E9"
-      },
-      {
-        "type": "color",
-        "id": "color_border",
-        "label": "Bordas",
-        "default": "#E8E8EA"
       },
       {
         "type": "color",
@@ -84,46 +75,38 @@
     "name": "Tipografia",
     "settings": [
       {
-        "type": "font_picker",
-        "id": "type_heading_font",
-        "label": "Fonte dos títulos",
-        "default": "poppins_n5"
+        "type": "select",
+        "id": "body_font_source",
+        "label": "Fonte principal",
+        "options": [
+          { "value": "system", "label": "Helvetica do sistema (igual à Rhode)" },
+          { "value": "picker", "label": "Escolher da biblioteca Shopify" }
+        ],
+        "default": "system",
+        "info": "Helvetica Neue no Mac/iPhone, Arial no Windows."
       },
       {
         "type": "font_picker",
         "id": "type_body_font",
-        "label": "Fonte do texto",
-        "default": "poppins_n4"
+        "label": "Fonte da biblioteca",
+        "default": "archivo_n4"
       },
       {
-        "type": "select",
-        "id": "product_title_case",
-        "label": "Nome dos produtos",
-        "options": [
-          {
-            "value": "lowercase",
-            "label": "minúsculas"
-          },
-          {
-            "value": "uppercase",
-            "label": "MAIÚSCULAS"
-          },
-          {
-            "value": "none",
-            "label": "Como cadastrado"
-          }
-        ],
-        "default": "lowercase"
+        "type": "font_picker",
+        "id": "type_display_font",
+        "label": "Fonte de destaque",
+        "info": "Usada nas palavras grandes dos cards de produto e no nome do produto.",
+        "default": "archivo_black_n4"
       },
       {
         "type": "range",
         "id": "body_font_size",
-        "min": 12,
+        "min": 14,
         "max": 18,
         "step": 1,
         "unit": "px",
         "label": "Tamanho base do texto",
-        "default": 14
+        "default": 16
       }
     ]
   },
@@ -131,30 +114,34 @@
     "name": "Layout",
     "settings": [
       {
-        "type": "select",
-        "id": "max_page_width",
-        "label": "Largura da página",
-        "options": [
-          {
-            "value": "90rem",
-            "label": "Estreita"
-          },
-          {
-            "value": "120rem",
-            "label": "Larga"
-          }
-        ],
-        "default": "120rem"
+        "type": "range",
+        "id": "page_margin",
+        "min": 8,
+        "max": 48,
+        "step": 2,
+        "unit": "px",
+        "label": "Margem ao redor dos cards (desktop)",
+        "default": 32
       },
       {
         "type": "range",
-        "id": "min_page_margin",
-        "min": 10,
-        "max": 60,
+        "id": "section_gap",
+        "min": 8,
+        "max": 64,
+        "step": 2,
+        "unit": "px",
+        "label": "Espaço entre seções",
+        "default": 32
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "min": 0,
+        "max": 32,
         "step": 1,
         "unit": "px",
-        "label": "Margem lateral",
-        "default": 20
+        "label": "Arredondamento dos cards",
+        "default": 12
       },
       {
         "type": "range",
@@ -164,17 +151,8 @@
         "step": 1,
         "unit": "px",
         "label": "Arredondamento dos botões",
-        "default": 0
-      },
-      {
-        "type": "range",
-        "id": "input_corner_radius",
-        "min": 0,
-        "max": 20,
-        "step": 1,
-        "unit": "px",
-        "label": "Arredondamento dos campos",
-        "default": 0
+        "info": "40 = formato pílula.",
+        "default": 40
       }
     ]
   },
@@ -186,14 +164,8 @@
         "id": "cart_type",
         "label": "Ao adicionar ao carrinho",
         "options": [
-          {
-            "value": "drawer",
-            "label": "Abrir gaveta lateral"
-          },
-          {
-            "value": "page",
-            "label": "Ir para a página do carrinho"
-          }
+          { "value": "drawer", "label": "Abrir gaveta lateral" },
+          { "value": "page", "label": "Ir para a página do carrinho" }
         ],
         "default": "drawer"
       },
@@ -224,6 +196,21 @@
         "type": "text",
         "id": "social_youtube",
         "label": "YouTube"
+      },
+      {
+        "type": "text",
+        "id": "social_pinterest",
+        "label": "Pinterest"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon"
       }
     ]
   }

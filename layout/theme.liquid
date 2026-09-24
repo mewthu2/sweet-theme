@@ -10,10 +10,11 @@
 
     {% render 'css-variables' %}
 
-    {% unless settings.type_body_font.system? %}
-      <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+    {% if settings.body_font_source == 'picker' %}
       {{ settings.type_body_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
-    {% endunless %}
+    {% endif %}
+    {{ settings.type_display_font | font_url | preload_tag: as: 'font', crossorigin: 'anonymous' }}
 
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
 
