@@ -40,8 +40,8 @@
         "whatsapp_message": "Olá! Vim pelo site da Sweet Sixteen.",
         "stores_label": "Ver lojas",
         "stores_link": "",
-        "background": "#F3F2E7",
-        "foreground": "#244930",
+        "background": "#244930",
+        "foreground": "#eeedbc",
         "speed": 5
       }
     },
@@ -52,9 +52,10 @@
           "type": "mega_menu",
           "settings": {
             "menu_item": "Loja",
-            "layout": "tabs",
+            "layout": "columns",
             "featured": "promos",
             "show_footer": true,
+            "footer_text": "Frete grátis acima de R$ 299",
             "collection": "",
             "products_limit": 3,
             "promo_1_heading": "Lançamentos",
@@ -62,8 +63,7 @@
             "promo_1_link": "",
             "promo_2_heading": "Kits",
             "promo_2_text": "Presentes prontos",
-            "promo_2_link": "",
-            "button_label": "Ver tudo"
+            "promo_2_link": ""
           }
         }
       },
@@ -72,15 +72,15 @@
       ],
       "settings": {
         "logo": "shopify://shop_images/Sweet_Sixteen_-_Logotipo_Principal_-_Fundo_Transparente_Escrito_Offwhite_e_Simbolo_Verde_Claro.png",
-        "logo_width": 140,
+        "logo_width": 120,
         "logo_position": "center",
-        "transparent_mode": "auto",
+        "transparent_mode": "home",
         "transparent_foreground": "#ffffff",
-        "background": "#F3F2E7",
+        "background": "#ffffff",
         "foreground": "#244930",
         "sticky": true,
         "menu": "main-menu",
-        "tab_products": 8
+        "tab_products": 4
       }
     }
   },

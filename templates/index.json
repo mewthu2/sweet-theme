@@ -15,6 +15,7 @@
         "image": "shopify://shop_images/ChatGPT_Image_24_de_set._de_2026_01_15_16.png",
         "image_mobile": "shopify://shop_images/xd.png",
         "height": "medium",
+        "heading_style": "editorial",
         "eyebrow": "",
         "heading": "",
         "text": "",
@@ -23,8 +24,7 @@
         "button_style": "button--light",
         "content_position": "bottom-left",
         "text_color": "#ffffff",
-        "overlay_opacity": 25,
-        "heading_style": "editorial"
+        "overlay_opacity": 25
       }
     },
     "swipe": {
@@ -43,14 +43,14 @@
       "settings": {
         "height": "medium",
         "heading_style": "bold",
-        "content_position": "center",
         "eyebrow": "",
         "heading": "um de cada, todos muito bons",
         "text": "<p>Na Sweet, a ideia é simples: poucos produtos, feitos com cuidado, que você usa todo dia e sempre quer de novo.</p>",
         "button_label": "Comprar Sweet",
         "button_link": "",
         "button_style": "button--light",
-        "text_color": "#FFFFFF",
+        "content_position": "center",
+        "text_color": "#ffffff",
         "overlay_opacity": 20
       }
     },
@@ -58,7 +58,7 @@
       "type": "image-with-text",
       "settings": {
         "layout": "image-right",
-        "background": "#F3F2E7",
+        "background": "#f3f2e7",
         "heading": "glow na medida",
         "text": "<p>Um toque de cor e brilho para as bochechas, com textura cremosa que se espalha fácil e dura o dia todo.</p>",
         "button_label": "Quero o meu",
@@ -69,7 +69,7 @@
       "type": "image-with-text",
       "settings": {
         "layout": "image-left",
-        "background": "#F3F2E7",
+        "background": "#f3f2e7",
         "heading": "até a última gota",
         "text": "<p>Hidratação que a pele sente na hora. Leve, sem pesar, e gentil até com a pele mais sensível.</p>",
         "button_label": "Pegar o meu",
@@ -81,23 +81,38 @@
       "blocks": {
         "img-1": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
         },
         "img-2": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
         },
         "img-3": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
         },
         "img-4": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
         },
         "img-5": {
           "type": "image",
-          "settings": {}
+          "settings": {
+            "caption": "",
+            "link": ""
+          }
         }
       },
       "block_order": [
