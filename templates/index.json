@@ -23,85 +23,129 @@
         "button_style": "button--light",
         "content_position": "bottom-left",
         "text_color": "#ffffff",
-        "overlay_opacity": 25
+        "overlay_opacity": 25,
+        "heading_style": "editorial"
       }
     },
     "swipe": {
       "type": "product-swipe",
       "settings": {
-        "eyebrow": "arraste",
-        "heading": "Os favoritos",
+        "heading": "",
         "collection": "frontpage",
         "products_to_show": 8,
-        "show_view_all": false
+        "visible": 3,
+        "show_view_all": false,
+        "view_all_label": "Ver tudo"
       }
     },
-    "tabs": {
-      "type": "collection-tabs",
+    "banner-text": {
+      "type": "hero",
+      "settings": {
+        "height": "medium",
+        "heading_style": "bold",
+        "content_position": "center",
+        "eyebrow": "",
+        "heading": "um de cada, todos muito bons",
+        "text": "<p>Na Sweet, a ideia é simples: poucos produtos, feitos com cuidado, que você usa todo dia e sempre quer de novo.</p>",
+        "button_label": "Comprar Sweet",
+        "button_link": "",
+        "button_style": "button--light",
+        "text_color": "#FFFFFF",
+        "overlay_opacity": 20
+      }
+    },
+    "feature-1": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "image-right",
+        "background": "#F3F2E7",
+        "heading": "glow na medida",
+        "text": "<p>Um toque de cor e brilho para as bochechas, com textura cremosa que se espalha fácil e dura o dia todo.</p>",
+        "button_label": "Quero o meu",
+        "button_link": ""
+      }
+    },
+    "feature-2": {
+      "type": "image-with-text",
+      "settings": {
+        "layout": "image-left",
+        "background": "#F3F2E7",
+        "heading": "até a última gota",
+        "text": "<p>Hidratação que a pele sente na hora. Leve, sem pesar, e gentil até com a pele mais sensível.</p>",
+        "button_label": "Pegar o meu",
+        "button_link": ""
+      }
+    },
+    "social": {
+      "type": "image-carousel",
       "blocks": {
-        "tab-1": {
-          "type": "tab",
+        "img-1": {
+          "type": "image",
+          "settings": {}
+        },
+        "img-2": {
+          "type": "image",
+          "settings": {}
+        },
+        "img-3": {
+          "type": "image",
+          "settings": {}
+        },
+        "img-4": {
+          "type": "image",
+          "settings": {}
+        },
+        "img-5": {
+          "type": "image",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "img-1",
+        "img-2",
+        "img-3",
+        "img-4",
+        "img-5"
+      ],
+      "settings": {
+        "heading": "você + sweet",
+        "button_label": "Siga no Instagram",
+        "button_link": ""
+      }
+    },
+    "values": {
+      "type": "values",
+      "blocks": {
+        "v1": {
+          "type": "item",
           "settings": {
-            "collection": "",
-            "label": "destaques"
+            "title": "missão",
+            "text": "<p>Criar produtos gostosos de usar, com fórmulas eficazes e preço justo.</p>"
           }
         },
-        "tab-2": {
-          "type": "tab",
+        "v2": {
+          "type": "item",
           "settings": {
-            "collection": "",
-            "label": "skincare"
+            "title": "comunidade",
+            "text": "<p>Crescemos junto com quem usa Sweet todos os dias.</p>"
           }
         },
-        "tab-3": {
-          "type": "tab",
+        "v3": {
+          "type": "item",
           "settings": {
-            "collection": "",
-            "label": "maquiagem"
-          }
-        },
-        "tab-4": {
-          "type": "tab",
-          "settings": {
-            "collection": "",
-            "label": "kits"
+            "title": "sustentabilidade",
+            "text": "<p>Embalagens pensadas para durar e gerar menos resíduo.</p>"
           }
         }
       },
       "block_order": [
-        "tab-1",
-        "tab-2",
-        "tab-3",
-        "tab-4"
+        "v1",
+        "v2",
+        "v3"
       ],
       "settings": {
-        "heading": "Compre por categoria",
-        "products_to_show": 8,
-        "columns": 4,
-        "show_quick_add": true
-      }
-    },
-    "story": {
-      "type": "image-with-text",
-      "settings": {
-        "layout": "image-left",
-        "background": "#eeedbc",
-        "eyebrow": "nossa história",
-        "heading": "Beleza leve, do seu jeito",
-        "text": "<p>Fórmulas pensadas para a pele jovem, com textura gostosa e resultado de verdade.</p>",
-        "button_label": "Conheça",
-        "button_link": ""
-      }
-    },
-    "statement": {
-      "type": "rich-text",
-      "settings": {
-        "background": "#ffffff",
-        "alignment": "center",
-        "eyebrow": "",
-        "heading": "Feito para a sua rotina",
-        "text": "<p>Produtos essenciais, fáceis de usar e com muito carinho em cada detalhe.</p>",
-        "button_label": "",
+        "statement": "Para CUIDAR, PROTEGER e REALÇAR a pele que você tem hoje, com resultados que aparecem com o tempo.",
+        "button_label": "Nossos valores",
         "button_link": ""
       }
     }
@@ -109,8 +153,10 @@
   "order": [
     "hero",
     "swipe",
-    "tabs",
-    "story",
-    "statement"
+    "banner-text",
+    "feature-1",
+    "feature-2",
+    "social",
+    "values"
   ]
 }

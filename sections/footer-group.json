@@ -5,22 +5,54 @@
     "footer": {
       "type": "footer",
       "blocks": {
-        "menu-1": { "type": "menu", "settings": { "heading": "Loja", "menu": "main-menu" } },
-        "menu-2": { "type": "menu", "settings": { "heading": "Ajuda", "menu": "footer" } },
-        "text-1": { "type": "text", "settings": { "heading": "Atendimento", "text": "<p>Seg. a sex., 9h às 18h</p>" } }
+        "menu-1": {
+          "type": "menu",
+          "settings": {
+            "heading": "Navegue",
+            "menu": "main-menu"
+          }
+        },
+        "social": {
+          "type": "social",
+          "settings": {
+            "heading": "Social"
+          }
+        },
+        "menu-2": {
+          "type": "menu",
+          "settings": {
+            "heading": "Oficial",
+            "menu": "footer"
+          }
+        },
+        "text-1": {
+          "type": "text",
+          "settings": {
+            "heading": "Atendimento",
+            "text": "<p>Seg. a sex., das 9h às 18h.</p><p>Mande uma mensagem quando quiser.</p>",
+            "show_copyright": true
+          }
+        }
       },
-      "block_order": ["menu-1", "menu-2", "text-1"],
+      "block_order": [
+        "menu-1",
+        "social",
+        "menu-2",
+        "text-1"
+      ],
       "settings": {
-        "background": "#E8E8EA",
-        "foreground": "#2E543B",
-        "show_newsletter": true,
-        "newsletter_heading": "entre para o clube sweet",
-        "show_payment_icons": true,
-        "legal_text": "SWEET COMERCIO LTDA",
+        "background": "#F3F2E7",
+        "foreground": "#244930",
         "show_wordmark": true,
-        "wordmark": "sweet sixteen"
+        "wordmark": "sweet",
+        "show_newsletter": true,
+        "show_localization": true,
+        "show_payment_icons": true,
+        "legal_text": "SWEET COMERCIO LTDA"
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

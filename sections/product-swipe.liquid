@@ -1,136 +1,125 @@
 {%- liquid
   assign collection = section.settings.collection
-  assign products_to_show = section.settings.products_to_show
 -%}
 
-<div class="product-swipe section-spacing" data-carousel>
-  <div class="section-heading product-swipe__heading">
-    <div>
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="eyebrow">{{ section.settings.eyebrow }}</p>
-      {%- endif -%}
+<div class="product-swipe" data-carousel>
+  {%- if section.settings.heading != blank or section.settings.show_view_all -%}
+    <div class="section-heading">
       {%- if section.settings.heading != blank -%}
         <h2>{{ section.settings.heading }}</h2>
       {%- endif -%}
-    </div>
-    <div class="carousel-arrows">
-      <button type="button" class="carousel-arrow" data-carousel-prev>
-        {% render 'icon', name: 'arrow-left' %}
-        <span class="visually-hidden">{{ 'general.previous' | t }}</span>
-      </button>
-      <button type="button" class="carousel-arrow" data-carousel-next>
-        {% render 'icon', name: 'arrow-right' %}
-        <span class="visually-hidden">{{ 'general.next' | t }}</span>
-      </button>
-    </div>
-  </div>
-
-  <ul class="product-swipe__track" role="list" data-carousel-track>
-    {%- if collection != blank and collection.products_count > 0 -%}
-      {%- for product in collection.products limit: products_to_show -%}
-        <li class="product-swipe__slide">
-          {% render 'product-swipe-card', product: product %}
-        </li>
-      {%- endfor -%}
-    {%- else -%}
-      {%- for i in (1..4) -%}
-        <li class="product-swipe__slide">
-          <article class="swipe-card">
-            <div class="swipe-card__top"><span class="swipe-card__label">{{ 'onboarding.product_type' | t }}</span></div>
-            <div class="swipe-card__media">{{ 'product-3' | placeholder_svg_tag: 'placeholder-svg swipe-card__image' }}</div>
-            <div class="swipe-card__heading">
-              <h3 class="swipe-card__title">{{ 'onboarding.product_title' | t }}</h3>
-              <span class="swipe-card__price">{{ 4990 | money }}</span>
-            </div>
-            <span class="button button--full swipe-card__buy">{{ 'products.add_to_cart' | t }}</span>
-          </article>
-        </li>
-      {%- endfor -%}
-    {%- endif -%}
-  </ul>
-
-  {%- if section.settings.show_view_all and collection != blank -%}
-    <div class="product-swipe__footer">
-      <a href="{{ collection.url }}" class="button button--secondary">{{ 'products.view_all' | t }}</a>
+      {%- if section.settings.show_view_all and collection != blank -%}
+        <a href="{{ collection.url }}" class="button">{{ section.settings.view_all_label }}</a>
+      {%- endif -%}
     </div>
   {%- endif -%}
+
+  <div class="product-swipe__viewport">
+    <ul class="product-swipe__track" role="list" data-carousel-track style="--visible: {{ section.settings.visible }};">
+      {%- if collection != blank and collection.products_count > 0 -%}
+        {%- for product in collection.products limit: section.settings.products_to_show -%}
+          <li class="product-swipe__slide">
+            {%- liquid
+              assign lazy = true
+              if forloop.index <= 3
+                assign lazy = false
+              endif
+            -%}
+            {% render 'product-card', product: product, show_quick_add: true, lazy: lazy %}
+          </li>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..4) -%}
+          <li class="product-swipe__slide">
+            <article class="product-card">
+              <div class="product-card__top"><span class="product-card__word display">{{ 'onboarding.product_type' | t }}</span></div>
+              <div class="product-card__media">{{ 'product-3' | placeholder_svg_tag: 'placeholder-svg product-card__image' }}</div>
+              <div class="product-card__info">
+                <div class="product-card__row">
+                  <h3 class="product-card__title product-title-case">{{ 'onboarding.product_title' | t }}</h3>
+                  <span class="product-card__price">{{ 4990 | money }}</span>
+                </div>
+                <p class="product-card__subtitle">{{ 'onboarding.product_subtitle' | t }}</p>
+              </div>
+            </article>
+          </li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+
+    <button type="button" class="circle-button product-swipe__arrow product-swipe__arrow--prev" data-carousel-prev>
+      {% render 'icon', name: 'arrow-left' %}
+      <span class="visually-hidden">{{ 'general.previous' | t }}</span>
+    </button>
+    <button type="button" class="circle-button product-swipe__arrow product-swipe__arrow--next" data-carousel-next>
+      {% render 'icon', name: 'arrow-right' %}
+      <span class="visually-hidden">{{ 'general.next' | t }}</span>
+    </button>
+  </div>
 </div>
 
 {% stylesheet %}
-  .product-swipe__heading {
-    align-items: flex-end;
-  }
-
-  .carousel-arrows {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  .carousel-arrow {
-    display: grid;
-    place-items: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: 50%;
-    background: var(--color-background);
-    color: var(--color-heading);
-    cursor: pointer;
-    transition: border-color 0.2s var(--ease), opacity 0.2s var(--ease);
-  }
-
-  .carousel-arrow:hover {
-    border-color: var(--color-heading);
-  }
-
-  .carousel-arrow:disabled {
-    opacity: 0.35;
-    cursor: default;
+  .product-swipe__viewport {
+    position: relative;
   }
 
   .product-swipe__track {
+    --gap: clamp(0.75rem, 2.8vw, 2.5rem);
     display: grid;
     grid-auto-flow: column;
     grid-auto-columns: 82%;
-    gap: 1rem;
-    margin: 0 calc(var(--page-margin) * -1);
-    padding: 0 var(--page-margin) 1rem;
+    gap: var(--gap);
+    padding: 0;
     list-style: none;
     overflow-x: auto;
     overscroll-behavior-x: contain;
     scroll-snap-type: x mandatory;
-    scroll-padding-inline: var(--page-margin);
-    scrollbar-width: thin;
-    scrollbar-color: var(--color-heading) var(--color-border);
+    scrollbar-width: none;
+  }
+
+  .product-swipe__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 750px) {
+    .product-swipe__track {
+      grid-auto-columns: calc((100% - var(--gap)) / 2);
+    }
+  }
+
+  @media (min-width: 990px) {
+    .product-swipe__track {
+      grid-auto-columns: calc((100% - var(--gap) * (var(--visible) - 1)) / var(--visible));
+    }
   }
 
   .product-swipe__slide {
     scroll-snap-align: start;
   }
 
-  @media (min-width: 750px) {
-    .product-swipe__track {
-      grid-auto-columns: calc((100% - 1.25rem * 2) / 2.4);
-      gap: 1.25rem;
-    }
+  .product-swipe__arrow {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
-  @media (min-width: 990px) {
-    .product-swipe__track {
-      grid-auto-columns: calc((100% - 1.25rem * 3) / 3.2);
-    }
+  .product-swipe__arrow:hover {
+    transform: translateY(-50%) scale(1.05);
   }
 
-  @media (max-width: 749px) {
-    .carousel-arrows {
+  .product-swipe__arrow--prev {
+    left: 0.75rem;
+  }
+
+  .product-swipe__arrow--next {
+    right: 0.75rem;
+  }
+
+  @media (hover: none) {
+    .product-swipe__arrow {
       display: none;
     }
-  }
-
-  .product-swipe__footer {
-    display: flex;
-    justify-content: center;
-    margin-top: 2rem;
   }
 {% endstylesheet %}
 
@@ -141,15 +130,9 @@
   "settings": [
     {
       "type": "text",
-      "id": "eyebrow",
-      "label": "Chamada pequena",
-      "default": "arraste"
-    },
-    {
-      "type": "text",
       "id": "heading",
       "label": "Título",
-      "default": "Os favoritos"
+      "info": "Opcional. Na Rhode o carrossel aparece sem título, logo abaixo do banner."
     },
     {
       "type": "collection",
@@ -166,10 +149,25 @@
       "default": 8
     },
     {
+      "type": "range",
+      "id": "visible",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Cards visíveis no desktop",
+      "default": 3
+    },
+    {
       "type": "checkbox",
       "id": "show_view_all",
       "label": "Mostrar botão \"ver tudo\"",
       "default": false
+    },
+    {
+      "type": "text",
+      "id": "view_all_label",
+      "label": "Texto do botão",
+      "default": "Ver tudo"
     }
   ],
   "presets": [

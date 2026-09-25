@@ -14,7 +14,7 @@
 -%}
 
 <div
-  class="announcement-bar full-width"
+  class="announcement-bar"
   style="--announcement-bg: {{ section.settings.background }}; --announcement-fg: {{ section.settings.foreground }};"
 >
   <div class="announcement-bar__inner">
@@ -60,10 +60,12 @@
 
 {% stylesheet %}
   .announcement-bar {
+    border-radius: var(--radius);
     background: var(--announcement-bg);
     color: var(--announcement-fg);
-    font-size: 0.6875rem;
-    letter-spacing: 0.1em;
+    font-size: 0.75rem;
+    font-weight: var(--font-bold--weight);
+    letter-spacing: 0.02em;
     text-transform: uppercase;
   }
 
@@ -72,10 +74,8 @@
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 1rem;
-    width: min(var(--page-width), 100%);
-    min-height: 2.25rem;
-    margin-inline: auto;
-    padding: 0.35rem var(--page-margin);
+    min-height: 2.5rem;
+    padding: 0.35rem clamp(0.75rem, 0.5rem + 1.5vw, 2rem);
   }
 
   .announcement-bar__side {
@@ -217,13 +217,13 @@
       "type": "color",
       "id": "background",
       "label": "Fundo",
-      "default": "#244930"
+      "default": "#F3F2E7"
     },
     {
       "type": "color",
       "id": "foreground",
       "label": "Texto",
-      "default": "#EEEDBC"
+      "default": "#244930"
     },
     {
       "type": "range",

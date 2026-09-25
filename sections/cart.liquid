@@ -1,4 +1,4 @@
-<div class="cart-page section-spacing">
+<div class="cart-page">
   <h1 class="cart-page__title">{{ 'cart.title' | t }}</h1>
 
   {%- if cart.item_count > 0 -%}
@@ -25,7 +25,7 @@
             <span>{{ cart.total_price | money }}</span>
           </div>
           <p class="cart-page__note">{{ 'cart.taxes_and_shipping' | t }}</p>
-          <button type="submit" name="checkout" class="button button--full">{{ 'cart.checkout' | t }}</button>
+          <button type="submit" name="checkout" class="button button--solid button--full">{{ 'cart.checkout' | t }}</button>
           {%- if additional_checkout_buttons -%}
             <div class="cart-page__additional">{{ content_for_additional_checkout_buttons }}</div>
           {%- endif -%}
@@ -67,6 +67,7 @@
     display: grid;
     gap: 1.25rem;
     padding: 1.5rem;
+    border-radius: var(--radius);
     background: var(--color-surface);
   }
 

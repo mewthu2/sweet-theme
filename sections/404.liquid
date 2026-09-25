@@ -1,19 +1,22 @@
-<div class="not-found section-spacing">
-  <p class="eyebrow">{{ '404.title' | t }}</p>
-  <h1>{{ '404.not_found' | t }}</h1>
-  <a href="{{ routes.all_products_collection_url }}" class="button">
-    {{- '404.back_to_shopping' | t -}}
-  </a>
+<div class="not-found card">
+  <h1 class="not-found__title">{{ '404.title' | t }}</h1>
+  <p>{{ '404.not_found' | t }} <a href="{{ routes.all_products_collection_url }}">{{ '404.back_to_shopping' | t }}</a></p>
 </div>
 
 {% stylesheet %}
   .not-found {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
+    display: grid;
+    place-content: center;
+    gap: 0.75rem;
+    min-height: 70svh;
+    padding: 3rem 1.5rem;
     text-align: center;
-    padding-block: 8rem;
+    font-size: 1.125rem;
+  }
+
+  .not-found__title {
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+    text-transform: uppercase;
   }
 {% endstylesheet %}
 

@@ -1,123 +1,134 @@
-<footer
-  class="site-footer full-width"
-  style="--footer-bg: {{ section.settings.background }}; --footer-fg: {{ section.settings.foreground }};"
->
-  <div class="site-footer__inner">
-    <div class="site-footer__top">
-      {%- if section.settings.show_newsletter -%}
-        <div class="site-footer__newsletter">
-          {%- if section.settings.newsletter_heading != blank -%}
-            <h2 class="site-footer__heading">{{ section.settings.newsletter_heading }}</h2>
-          {%- endif -%}
-          {%- if section.settings.newsletter_text != blank -%}
-            <div class="site-footer__text">{{ section.settings.newsletter_text }}</div>
-          {%- endif -%}
-          {%- form 'customer', id: 'FooterNewsletter', class: 'newsletter-form' -%}
-            <input type="hidden" name="contact[tags]" value="newsletter">
-            {%- if form.posted_successfully? -%}
-              <p class="newsletter-form__message" role="status">{{ 'newsletter.success' | t }}</p>
-            {%- else -%}
-              <div class="newsletter-form__field">
-                <label for="FooterNewsletterEmail" class="visually-hidden">{{ 'newsletter.email' | t }}</label>
-                <input
-                  id="FooterNewsletterEmail"
-                  type="email"
-                  name="contact[email]"
-                  class="newsletter-form__input"
-                  placeholder="{{ 'newsletter.email' | t }}"
-                  autocomplete="email"
-                  required
-                  {% if form.errors %}
-                    aria-invalid="true" aria-describedby="FooterNewsletterError"
-                  {% endif %}
-                >
-                <button type="submit" class="newsletter-form__submit">
-                  {{- 'newsletter.submit' | t -}}
-                </button>
-              </div>
-              {%- if form.errors -%}
-                <div id="FooterNewsletterError" class="newsletter-form__message">{{ form.errors | default_errors }}</div>
-              {%- endif -%}
+<footer class="site-footer card" style="--footer-bg: {{ section.settings.background }}; --footer-fg: {{ section.settings.foreground }};">
+  {%- if section.settings.show_wordmark -%}
+    <div class="site-footer__wordmark">
+      {%- if section.settings.wordmark_image -%}
+        {{
+          section.settings.wordmark_image
+          | image_url: width: 2800
+          | image_tag: class: 'site-footer__wordmark-image', sizes: '100vw', widths: '800, 1400, 2000, 2800', loading: 'lazy', alt: shop.name
+        }}
+      {%- else -%}
+        <p class="site-footer__wordmark-text display" aria-hidden="true">{{ section.settings.wordmark | default: shop.name }}</p>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="site-footer__main">
+    {%- if section.settings.show_newsletter -%}
+      <div class="site-footer__newsletter">
+        {%- if section.settings.newsletter_text != blank -%}
+          <div class="site-footer__intro rte">{{ section.settings.newsletter_text }}</div>
+        {%- endif -%}
+        {%- form 'customer', id: 'FooterNewsletter', class: 'newsletter-form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="newsletter-form__message" role="status">{{ 'newsletter.success' | t }}</p>
+          {%- else -%}
+            <div class="newsletter-form__field">
+              <label for="FooterNewsletterEmail" class="visually-hidden">{{ 'newsletter.email' | t }}</label>
+              <input
+                id="FooterNewsletterEmail"
+                type="email"
+                name="contact[email]"
+                class="newsletter-form__input"
+                placeholder="{{ 'newsletter.email' | t }}"
+                autocomplete="email"
+                required
+                {% if form.errors %}
+                  aria-invalid="true" aria-describedby="FooterNewsletterError"
+                {% endif %}
+              >
+              <button type="submit" class="newsletter-form__submit">{{ 'newsletter.submit' | t }}</button>
+            </div>
+            {%- if form.errors -%}
+              <div id="FooterNewsletterError" class="newsletter-form__message">{{ form.errors | default_errors }}</div>
             {%- endif -%}
-          {%- endform -%}
+          {%- endif -%}
+        {%- endform -%}
+        {%- if section.settings.newsletter_note != blank -%}
+          <div class="site-footer__note rte">{{ section.settings.newsletter_note }}</div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="site-footer__columns">
+      {%- for block in section.blocks -%}
+        <div class="site-footer__column" {{ block.shopify_attributes }}>
+          {%- if block.settings.heading != blank -%}
+            <h2 class="site-footer__heading">{{ block.settings.heading }}</h2>
+          {%- endif -%}
+          {%- case block.type -%}
+            {%- when 'menu' -%}
+              <ul class="site-footer__links" role="list">
+                {%- for link in block.settings.menu.links -%}
+                  <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            {%- when 'social' -%}
+              <ul class="site-footer__links" role="list">
+                {%- if settings.social_instagram != blank -%}
+                  <li><a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">{% render 'icon', name: 'instagram' %}Instagram</a></li>
+                {%- endif -%}
+                {%- if settings.social_youtube != blank -%}
+                  <li><a href="{{ settings.social_youtube }}" target="_blank" rel="noopener">{% render 'icon', name: 'youtube' %}YouTube</a></li>
+                {%- endif -%}
+                {%- if settings.social_tiktok != blank -%}
+                  <li><a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">{% render 'icon', name: 'tiktok' %}TikTok</a></li>
+                {%- endif -%}
+                {%- if settings.social_pinterest != blank -%}
+                  <li><a href="{{ settings.social_pinterest }}" target="_blank" rel="noopener">{% render 'icon', name: 'pinterest' %}Pinterest</a></li>
+                {%- endif -%}
+              </ul>
+            {%- when 'text' -%}
+              <div class="site-footer__links rte">{{ block.settings.text }}</div>
+              {%- if block.settings.show_copyright -%}
+                <p class="site-footer__copyright">&copy; {{ shop.name }} {{ 'now' | date: '%Y' }}</p>
+              {%- endif -%}
+          {%- endcase -%}
         </div>
-      {%- endif -%}
-
-      <div class="site-footer__menus">
-        {%- for block in section.blocks -%}
-          <div class="site-footer__menu" {{ block.shopify_attributes }}>
-            {%- case block.type -%}
-              {%- when 'menu' -%}
-                {%- if block.settings.heading != blank -%}
-                  <h3 class="site-footer__menu-heading">{{ block.settings.heading }}</h3>
-                {%- endif -%}
-                <ul role="list">
-                  {%- for link in block.settings.menu.links -%}
-                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
-                  {%- endfor -%}
-                </ul>
-              {%- when 'text' -%}
-                {%- if block.settings.heading != blank -%}
-                  <h3 class="site-footer__menu-heading">{{ block.settings.heading }}</h3>
-                {%- endif -%}
-                <div class="site-footer__text">{{ block.settings.text }}</div>
-            {%- endcase -%}
-          </div>
-        {%- endfor -%}
-      </div>
+      {%- endfor -%}
     </div>
+  </div>
 
-    <div class="site-footer__bottom">
-      <div class="site-footer__social">
-        {%- if settings.social_instagram != blank -%}
-          <a href="{{ settings.social_instagram }}" target="_blank" rel="noopener">
-            {% render 'icon', name: 'instagram' %}<span class="visually-hidden">Instagram</span>
-          </a>
-        {%- endif -%}
-        {%- if settings.social_tiktok != blank -%}
-          <a href="{{ settings.social_tiktok }}" target="_blank" rel="noopener">
-            {% render 'icon', name: 'tiktok' %}<span class="visually-hidden">TikTok</span>
-          </a>
-        {%- endif -%}
-        {%- if settings.social_youtube != blank -%}
-          <a href="{{ settings.social_youtube }}" target="_blank" rel="noopener">
-            {% render 'icon', name: 'youtube' %}<span class="visually-hidden">YouTube</span>
-          </a>
-        {%- endif -%}
-      </div>
-
-      {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
-        <ul class="site-footer__payments" role="list">
-          {%- for type in shop.enabled_payment_types -%}
-            <li>{{ type | payment_type_svg_tag: class: 'site-footer__payment-icon' }}</li>
+  <div class="site-footer__bottom">
+    {%- if section.settings.show_localization and localization.available_countries.size > 1 -%}
+      {%- form 'localization', class: 'site-footer__localization' -%}
+        <label for="FooterCountry">{{ 'footer.country' | t }}</label>
+        <select id="FooterCountry" name="country_code" onchange="this.form.submit()">
+          {%- for country in localization.available_countries -%}
+            <option
+              value="{{ country.iso_code }}"
+              {% if country.iso_code == localization.country.iso_code %}
+                selected
+              {% endif %}
+            >
+              {{ country.name }} ({{ country.currency.iso_code }} {{ country.currency.symbol }})
+            </option>
           {%- endfor -%}
-        </ul>
-      {%- endif -%}
+        </select>
+      {%- endform -%}
+    {%- endif -%}
 
-      <p class="site-footer__copyright">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }}
-        {%- if section.settings.legal_text != blank %} · {{ section.settings.legal_text }}{% endif %}
-      </p>
-    </div>
+    {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+      <ul class="site-footer__payments" role="list">
+        {%- for type in shop.enabled_payment_types -%}
+          <li>{{ type | payment_type_svg_tag: class: 'site-footer__payment-icon' }}</li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
 
-    {%- if section.settings.show_wordmark -%}
-      <p class="site-footer__wordmark" aria-hidden="true">{{ section.settings.wordmark | default: shop.name }}</p>
+    {%- if section.settings.legal_text != blank -%}
+      <p class="site-footer__legal">{{ section.settings.legal_text }}</p>
     {%- endif -%}
   </div>
 </footer>
 
 {% stylesheet %}
   .site-footer {
+    margin-bottom: var(--page-margin);
     background: var(--footer-bg);
     color: var(--footer-fg);
-    margin-top: auto;
-    overflow: hidden;
-  }
-
-  .site-footer__inner {
-    width: min(var(--page-width), 100%);
-    margin-inline: auto;
-    padding: clamp(3rem, 5vw, 4.5rem) var(--page-margin) 1.5rem;
+    --color-heading: var(--footer-fg);
   }
 
   .site-footer a {
@@ -129,116 +140,162 @@
     text-decoration: underline;
   }
 
-  .site-footer__top {
+  .site-footer__wordmark {
+    padding: clamp(1.25rem, 3vw, 2.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+    overflow: hidden;
+  }
+
+  .site-footer__wordmark-image {
+    width: 100%;
+    height: auto;
+    padding-inline: clamp(1rem, 5vw, 5rem);
+  }
+
+  .site-footer__wordmark-text {
+    font-size: clamp(4.5rem, 21vw, 22rem);
+    line-height: 0.82;
+    letter-spacing: -0.05em;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .site-footer__main {
     display: grid;
-    gap: 3rem;
+    border-top: 1px solid var(--color-border);
   }
 
   @media (min-width: 990px) {
-    .site-footer__top {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      gap: 4rem;
+    .site-footer__main {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.65fr);
+    }
+
+    .site-footer__newsletter {
+      border-right: 1px solid var(--color-border);
     }
   }
 
-  .site-footer__heading {
-    color: inherit;
-    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
-    text-transform: lowercase;
-    margin-bottom: 0.75rem;
+  .site-footer__newsletter,
+  .site-footer__columns {
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
   }
 
-  .site-footer__text {
-    font-size: 0.875rem;
-    opacity: 0.85;
+  .site-footer__newsletter {
+    display: grid;
+    align-content: start;
+    gap: 1.5rem;
   }
 
-  .newsletter-form {
-    margin-top: 1.5rem;
+  .site-footer__intro > * + * {
+    margin-top: 0.9rem;
   }
 
   .newsletter-form__field {
     display: flex;
-    border-bottom: 1px solid currentcolor;
+    overflow: hidden;
+    border-radius: var(--radius-small);
+    background: var(--color-background);
   }
 
   .newsletter-form__input {
     flex: 1;
     min-width: 0;
-    min-height: 3rem;
+    min-height: 3.25rem;
+    padding-inline: 1rem;
     border: 0;
+    border-radius: 0;
     background: none;
-    color: inherit;
+    color: var(--footer-fg);
     outline: none;
   }
 
   .newsletter-form__input::placeholder {
     color: inherit;
-    opacity: 0.6;
+    opacity: 0.75;
   }
 
   .newsletter-form__submit {
+    padding-inline: 1.9rem;
     border: 0;
+    border-left: 1px solid var(--color-border);
     background: none;
     color: inherit;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
   }
 
-  .newsletter-form__message {
-    margin-top: 0.75rem;
-    font-size: 0.8125rem;
+  .newsletter-form__submit:hover {
+    background: var(--color-accent);
   }
 
-  .site-footer__menus {
+  .newsletter-form__message {
+    font-size: 0.9375rem;
+  }
+
+  .site-footer__columns {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2rem;
+    gap: 2.5rem 1.5rem;
   }
 
   @media (min-width: 750px) {
-    .site-footer__menus {
-      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+    .site-footer__columns {
+      grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
     }
   }
 
-  .site-footer__menu-heading {
-    color: inherit;
-    font-family: var(--font-body--family);
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.1em;
+  .site-footer__heading {
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
     text-transform: uppercase;
-    margin-bottom: 1rem;
   }
 
-  .site-footer__menu ul {
+  .site-footer__links {
     display: grid;
-    gap: 0.5rem;
+    gap: 1.15rem;
     padding: 0;
     list-style: none;
-    font-size: 0.875rem;
+  }
+
+  .site-footer__links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .site-footer__links .icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .site-footer__links.rte > * + * {
+    margin-top: 0;
+  }
+
+  .site-footer__copyright {
+    margin-top: 1.15rem;
   }
 
   .site-footer__bottom {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-between;
-    gap: 1rem 2rem;
-    margin-top: 3.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid currentcolor;
-    border-color: color-mix(in srgb, currentcolor 20%, transparent);
-    font-size: 0.75rem;
+    justify-content: center;
+    gap: 1rem 2.5rem;
+    padding: 1.5rem clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border-top: 1px solid var(--color-border);
+    font-size: 0.875rem;
   }
 
-  .site-footer__social {
+  .site-footer__localization {
     display: flex;
+    align-items: center;
     gap: 1rem;
+  }
+
+  .site-footer__localization select {
+    border: 0;
+    font-weight: var(--font-bold--weight);
+    cursor: pointer;
   }
 
   .site-footer__payments {
@@ -253,37 +310,47 @@
     width: 2.25rem;
     height: auto;
   }
-
-  .site-footer__wordmark {
-    margin: 2rem 0 -0.12em;
-    font-family: var(--font-heading--family);
-    font-size: clamp(4rem, 19vw, 18rem);
-    line-height: 0.8;
-    letter-spacing: -0.05em;
-    text-transform: lowercase;
-    text-align: center;
-    white-space: nowrap;
-    opacity: 0.95;
-  }
 {% endstylesheet %}
 
 {% schema %}
 {
   "name": "Rodapé",
   "class": "section-footer",
-  "max_blocks": 5,
+  "max_blocks": 6,
   "settings": [
     {
       "type": "color",
       "id": "background",
       "label": "Fundo",
-      "default": "#E8E8EA"
+      "default": "#F3F2E7"
     },
     {
       "type": "color",
       "id": "foreground",
       "label": "Texto",
-      "default": "#2E543B"
+      "default": "#244930"
+    },
+    {
+      "type": "header",
+      "content": "Marca grande"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_wordmark",
+      "label": "Mostrar marca grande",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "wordmark_image",
+      "label": "Imagem da marca",
+      "info": "Use o logo em PNG/SVG sem fundo. Se vazio, mostra o texto abaixo."
+    },
+    {
+      "type": "text",
+      "id": "wordmark",
+      "label": "Texto da marca",
+      "default": "sweet"
     },
     {
       "type": "header",
@@ -296,20 +363,26 @@
       "default": true
     },
     {
-      "type": "text",
-      "id": "newsletter_heading",
-      "label": "Título",
-      "default": "entre para o clube sweet"
-    },
-    {
       "type": "richtext",
       "id": "newsletter_text",
       "label": "Texto",
-      "default": "<p>Novidades, lançamentos e ofertas exclusivas no seu e-mail.</p>"
+      "default": "<p>Entre para o clube Sweet e tenha um glow sem esforço.</p><p>Dicas, lançamentos e conteúdos exclusivos no seu e-mail.</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "newsletter_note",
+      "label": "Observação",
+      "default": "<p>Ao se inscrever, você concorda com a nossa Política de Privacidade.</p>"
     },
     {
       "type": "header",
       "content": "Rodapé inferior"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_localization",
+      "label": "Mostrar seletor de país/moeda",
+      "default": true
     },
     {
       "type": "checkbox",
@@ -322,18 +395,6 @@
       "id": "legal_text",
       "label": "Texto legal",
       "default": "SWEET COMERCIO LTDA"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_wordmark",
-      "label": "Mostrar marca grande no final",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "wordmark",
-      "label": "Texto da marca",
-      "default": "sweet sixteen"
     }
   ],
   "blocks": [
@@ -345,13 +406,26 @@
           "type": "text",
           "id": "heading",
           "label": "Título",
-          "default": "Loja"
+          "default": "Navegue"
         },
         {
           "type": "link_list",
           "id": "menu",
           "label": "Menu",
           "default": "footer"
+        }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Redes sociais",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título",
+          "default": "Social"
         }
       ]
     },
@@ -369,7 +443,13 @@
           "type": "richtext",
           "id": "text",
           "label": "Texto",
-          "default": "<p>Seg. a sex., 9h às 18h</p>"
+          "default": "<p>Seg. a sex., das 9h às 18h.</p><p>Mande uma mensagem quando quiser.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_copyright",
+          "label": "Mostrar © da loja",
+          "default": true
         }
       ]
     }

@@ -9,9 +9,9 @@
  */
 {
   "404": {
-    "title": "Erro 404",
-    "not_found": "Página não encontrada",
-    "back_to_shopping": "Voltar para a loja"
+    "title": "404 página não encontrada",
+    "not_found": "A página que você procurou não existe.",
+    "back_to_shopping": "Continue comprando."
   },
   "accessibility": {
     "skip_to_content": "Pular para o conteúdo"
@@ -51,7 +51,9 @@
     },
     "sort_by": "Ordenar por",
     "title": "Coleções",
-    "to": "Até"
+    "to": "Até",
+    "view_grid": "Mudar visualização",
+    "shop_all": "Ver tudo"
   },
   "customers": {
     "login": {
@@ -93,7 +95,8 @@
   "onboarding": {
     "collection_title": "Coleção",
     "product_title": "Nome do produto",
-    "product_type": "categoria"
+    "product_type": "categoria",
+    "product_subtitle": "Descrição curta do produto"
   },
   "password": {
     "title": "Loja em breve",
@@ -114,7 +117,10 @@
     "quantity": "Quantidade",
     "sold_out": "Esgotado",
     "unavailable": "Indisponível",
-    "view_all": "Ver tudo"
+    "view_all": "Ver tudo",
+    "buy": "Comprar",
+    "rating": "Nota {{ rating }} de {{ max }}",
+    "show_media": "Mostrar imagem {{ index }}"
   },
   "search": {
     "title": "Busca",
@@ -126,5 +132,8 @@
   "announcement": {
     "call": "Ligar para a loja",
     "whatsapp": "Conversar no WhatsApp"
+  },
+  "footer": {
+    "country": "País/região:"
   }
 }

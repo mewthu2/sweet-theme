@@ -1,5 +1,5 @@
 <div
-  class="rich-text full-width"
+  class="rich-text card"
   style="--rich-bg: {{ section.settings.background }}; --rich-align: {{ section.settings.alignment }};"
 >
   <div class="rich-text__inner">
@@ -13,7 +13,7 @@
       <div class="rte rich-text__text">{{ section.settings.text }}</div>
     {%- endif -%}
     {%- if section.settings.button_label != blank -%}
-      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="button button--secondary">
+      <a href="{{ section.settings.button_link | default: routes.all_products_collection_url }}" class="button">
         {{- section.settings.button_label -}}
       </a>
     {%- endif -%}
@@ -23,21 +23,21 @@
 {% stylesheet %}
   .rich-text {
     background: var(--rich-bg);
-    padding: clamp(3rem, 6vw, 6rem) var(--page-margin);
+    padding: clamp(3rem, 6vw, 6rem) clamp(1.25rem, 4vw, 3rem);
   }
 
   .rich-text__inner {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1.25rem;
     max-width: 44rem;
     margin-inline: auto;
     text-align: var(--rich-align);
-    align-items: center;
   }
 
   .rich-text__heading {
-    font-size: clamp(1.75rem, 1.3rem + 2vw, 3rem);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
   }
 
   .rich-text__text {
@@ -54,7 +54,7 @@
       "type": "color",
       "id": "background",
       "label": "Fundo",
-      "default": "#FFFFFF"
+      "default": "#F3F2E7"
     },
     {
       "type": "text_alignment",

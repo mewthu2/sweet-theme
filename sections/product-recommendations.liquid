@@ -1,5 +1,5 @@
 <product-recommendations
-  class="product-recommendations section-spacing"
+  class="product-recommendations"
   data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}&intent=related"
   style="--columns: {{ section.settings.products_to_show }};"
 >
@@ -21,7 +21,7 @@
       'product-recommendations',
       class extends HTMLElement {
         connectedCallback() {
-          if (this.querySelector('.product-grid')) return;
+          if (this.children.length && this.innerHTML.trim()) return;
           const observer = new IntersectionObserver(
             (entries) => {
               if (!entries[0].isIntersecting) return;
@@ -32,6 +32,7 @@
                   const html = new DOMParser().parseFromString(text, 'text/html');
                   const next = html.querySelector('product-recommendations');
                   if (next && next.innerHTML.trim()) this.innerHTML = next.innerHTML;
+                  else if (this.closest('details')) this.closest('details').remove();
                 })
                 .catch(() => {});
             },
@@ -53,16 +54,16 @@
       "type": "text",
       "id": "heading",
       "label": "Título",
-      "default": "Combina com"
+      "default": "você também vai amar"
     },
     {
       "type": "range",
       "id": "products_to_show",
       "min": 2,
-      "max": 5,
+      "max": 4,
       "step": 1,
       "label": "Quantidade de produtos",
-      "default": 4
+      "default": 3
     }
   ],
   "enabled_on": {

@@ -147,7 +147,7 @@
           label.textContent = button.dataset.label;
           const dash = document.createElement('span');
           dash.setAttribute('aria-hidden', 'true');
-          dash.textContent = ' – ';
+          dash.textContent = ' - ';
           const price = document.createElement('span');
           price.textContent = option.dataset.variantPrice;
           button.replaceChildren(label, dash, price);
@@ -168,7 +168,7 @@
     }
 
     const tab = event.target.closest('[role="tab"][aria-controls]');
-    if (tab) selectTab(tab);
+    if (tab && !tab.hasAttribute('href')) selectTab(tab);
   });
 
   document.addEventListener('keydown', (event) => {
@@ -194,23 +194,32 @@
       el.tabIndex = selected ? 0 : -1;
       const panel = document.getElementById(el.getAttribute('aria-controls'));
       if (panel) panel.hidden = !selected;
+      if (panel && selected) panel.querySelectorAll('[data-carousel-track]').forEach(updateCarouselArrows);
     });
   }
 
-  const updateCarouselArrows = (track) => {
+  function updateCarouselArrows(track) {
     const carousel = track.closest('[data-carousel]');
     const prev = carousel.querySelector('[data-carousel-prev]');
     const next = carousel.querySelector('[data-carousel-next]');
     const max = track.scrollWidth - track.clientWidth - 2;
     if (prev) prev.disabled = track.scrollLeft <= 2;
     if (next) next.disabled = track.scrollLeft >= max;
-  };
+    const progress = carousel.querySelector('[data-carousel-progress]');
+    if (progress) {
+      const ratio = track.scrollWidth > track.clientWidth ? track.scrollLeft / (track.scrollWidth - track.clientWidth) : 1;
+      const size = track.clientWidth / track.scrollWidth;
+      progress.style.setProperty('--size', size);
+      progress.style.setProperty('--progress', ratio);
+    }
+  }
 
   const initCarousels = (scope = document) => {
     scope.querySelectorAll('[data-carousel-track]').forEach((track) => {
       if (track.dataset.ready) return;
       track.dataset.ready = 'true';
       track.addEventListener('scroll', () => updateCarouselArrows(track), { passive: true });
+      new ResizeObserver(() => updateCarouselArrows(track)).observe(track);
       updateCarouselArrows(track);
     });
   };
@@ -264,7 +273,10 @@
 
       this.form.querySelector('input[name="id"]').value = variant.id;
       button.disabled = !variant.available;
-      label.textContent = variant.available ? theme.strings.addToCart : theme.strings.soldOut;
+      label.textContent = variant.available ? label.dataset.availableLabel || theme.strings.addToCart : theme.strings.soldOut;
+      section.querySelectorAll('[data-button-price]').forEach((el) => {
+        el.textContent = variant.price;
+      });
       section.querySelectorAll('[data-product-price]').forEach((el) => {
         el.innerHTML = variant.price_html;
       });
@@ -275,7 +287,8 @@
 
       if (variant.media_id) {
         const media = section.querySelector(`[data-media-id="${variant.media_id}"]`);
-        media?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        const track = media?.parentElement;
+        if (media && track) track.scrollTo({ left: media.offsetLeft, behavior: 'smooth' });
       }
     }
   }

@@ -1,0 +1,221 @@
+<div class="image-carousel card card-padding" data-carousel>
+  <div class="section-heading image-carousel__heading">
+    {%- if section.settings.heading != blank -%}
+      <h2>{{ section.settings.heading }}</h2>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <a href="{{ section.settings.button_link | default: settings.social_instagram }}" class="button">
+        {{- section.settings.button_label -}}
+      </a>
+    {%- endif -%}
+  </div>
+
+  <ul class="image-carousel__track" role="list" data-carousel-track>
+    {%- for block in section.blocks -%}
+      <li class="image-carousel__slide" {{ block.shopify_attributes }}>
+        {%- liquid
+          assign item_tag = 'div'
+          if block.settings.link != blank
+            assign item_tag = 'a'
+          endif
+        -%}
+        <{{ item_tag }}
+          class="image-carousel__item"
+          {% if block.settings.link != blank %}
+            href="{{ block.settings.link }}"
+          {% endif %}
+        >
+        {%- if block.settings.image -%}
+          {{
+            block.settings.image
+            | image_url: width: 900
+            | image_tag: class: 'image-carousel__image', sizes: '(min-width: 990px) 26vw, 70vw', widths: '300, 500, 700, 900', loading: 'lazy'
+          }}
+        {%- else -%}
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'placeholder-svg image-carousel__image' }}
+        {%- endif -%}
+        {%- if block.settings.caption != blank -%}
+          <span class="image-carousel__caption">{{ block.settings.caption }}</span>
+        {%- endif -%}
+        </{{ item_tag }}>
+      </li>
+    {%- endfor -%}
+  </ul>
+
+  <div class="image-carousel__controls">
+    <div class="image-carousel__progress" data-carousel-progress><span></span></div>
+    <div class="image-carousel__arrows">
+      <button type="button" class="circle-button circle-button--outline" data-carousel-prev>
+        {% render 'icon', name: 'arrow-left' %}
+        <span class="visually-hidden">{{ 'general.previous' | t }}</span>
+      </button>
+      <button type="button" class="circle-button circle-button--outline" data-carousel-next>
+        {% render 'icon', name: 'arrow-right' %}
+        <span class="visually-hidden">{{ 'general.next' | t }}</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .image-carousel {
+    padding-right: 0;
+  }
+
+  .image-carousel__heading {
+    padding-right: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  }
+
+  .image-carousel__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 72%;
+    gap: 1.5rem;
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .image-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 750px) {
+    .image-carousel__track {
+      grid-auto-columns: calc((100% - 1.5rem * 3) / 3.4);
+    }
+  }
+
+  .image-carousel__slide {
+    scroll-snap-align: start;
+  }
+
+  .image-carousel__item {
+    position: relative;
+    display: block;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-small);
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .image-carousel__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+
+  a.image-carousel__item:hover .image-carousel__image {
+    transform: scale(1.03);
+  }
+
+  .image-carousel__caption {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    font-weight: var(--font-bold--weight);
+    text-shadow: 0 1px 8px rgb(0 0 0 / 0.3);
+  }
+
+  .image-carousel__controls {
+    display: flex;
+    align-items: center;
+    gap: 1.9rem;
+    margin-top: 1.5rem;
+    padding-right: clamp(1.25rem, 0.8rem + 2vw, 2.5rem);
+  }
+
+  .image-carousel__progress {
+    --size: 0.3;
+    --progress: 0;
+    position: relative;
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .image-carousel__progress span {
+    position: absolute;
+    top: -1px;
+    left: calc(var(--progress) * (1 - var(--size)) * 100%);
+    width: calc(var(--size) * 100%);
+    height: 3px;
+    border-radius: 3px;
+    background: var(--color-heading);
+    transition: left 0.15s linear;
+  }
+
+  .image-carousel__arrows {
+    display: flex;
+    gap: 0.6rem;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Carrossel de imagens",
+  "class": "section-image-carousel",
+  "max_blocks": 16,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "você + sweet"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do botão",
+      "default": "Siga no Instagram"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do botão",
+      "info": "Se vazio, usa o Instagram das configurações do tema."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Imagem",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagem"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Legenda"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Carrossel de imagens",
+      "blocks": [
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" },
+        { "type": "image" }
+      ]
+    }
+  ]
+}
+{% endschema %}

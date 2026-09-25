@@ -3,23 +3,54 @@
     "main": {
       "type": "product",
       "blocks": {
-        "description": { "type": "description", "settings": { "heading": "Descrição", "open": true } },
-        "how-to": { "type": "collapsible", "settings": { "heading": "Como usar", "content": "<p>Aplique sobre a pele limpa e seca.</p>" } },
-        "ingredients": { "type": "collapsible", "settings": { "heading": "Ingredientes", "content": "<p>Consulte a embalagem.</p>" } },
-        "shipping": { "type": "text", "settings": { "text": "<p>Frete grátis acima de R$ 299</p>" } }
+        "how-to": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Como usar",
+            "content": "<p>Aplique sobre a pele limpa e seca.</p>"
+          }
+        },
+        "ingredients": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Ingredientes",
+            "content": "<p>Consulte a embalagem.</p>"
+          }
+        },
+        "routine": {
+          "type": "complementary",
+          "settings": {
+            "heading": "Complete sua rotina"
+          }
+        }
       },
-      "block_order": ["shipping", "description", "how-to", "ingredients"],
+      "block_order": [
+        "how-to",
+        "ingredients",
+        "routine"
+      ],
       "settings": {
+        "show_description": true,
         "show_dynamic_checkout": false
       }
     },
     "recommendations": {
       "type": "product-recommendations",
       "settings": {
-        "heading": "Combina com",
+        "heading": "você também vai amar",
         "products_to_show": 4
+      }
+    },
+    "story": {
+      "type": "product-story",
+      "settings": {
+        "heading_prefix": "conheça"
       }
     }
   },
-  "order": ["main", "recommendations"]
+  "order": [
+    "main",
+    "story",
+    "recommendations"
+  ]
 }

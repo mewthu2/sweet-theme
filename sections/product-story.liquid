@@ -1,0 +1,132 @@
+{%- liquid
+  assign story_images = product.metafields.custom.story_images.value
+  assign story_heading = product.metafields.custom.story_heading.value
+  if story_heading == blank
+    assign story_heading = section.settings.heading_prefix | append: ' ' | append: product.title | downcase
+  endif
+  assign image_count = product.media.size
+  if story_images != blank
+    assign image_count = story_images.size
+  endif
+-%}
+
+{%- if image_count > 1 -%}
+  <div class="product-story card card-padding" data-carousel>
+    <h2 class="product-story__heading">{{ story_heading }}</h2>
+    <div class="product-story__viewport">
+      <ul class="product-story__track" role="list" data-carousel-track>
+        {%- if story_images != blank -%}
+          {%- for image in story_images -%}
+            <li class="product-story__slide">
+              {{ image | image_url: width: 900 | image_tag: class: 'product-story__image', sizes: '(min-width: 990px) 22vw, 70vw', widths: '300, 600, 900', loading: 'lazy' }}
+            </li>
+          {%- endfor -%}
+        {%- else -%}
+          {%- for media in product.media -%}
+            <li class="product-story__slide">
+              {{ media.preview_image | image_url: width: 900 | image_tag: class: 'product-story__image', sizes: '(min-width: 990px) 22vw, 70vw', widths: '300, 600, 900', loading: 'lazy', alt: media.alt }}
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      </ul>
+      <button type="button" class="circle-button product-story__arrow product-story__arrow--prev" data-carousel-prev>
+        {% render 'icon', name: 'arrow-left' %}
+        <span class="visually-hidden">{{ 'general.previous' | t }}</span>
+      </button>
+      <button type="button" class="circle-button product-story__arrow product-story__arrow--next" data-carousel-next>
+        {% render 'icon', name: 'arrow-right' %}
+        <span class="visually-hidden">{{ 'general.next' | t }}</span>
+      </button>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .product-story__heading {
+    max-width: 22rem;
+    margin-bottom: 2rem;
+  }
+
+  .product-story__viewport {
+    position: relative;
+  }
+
+  .product-story__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 72%;
+    gap: clamp(1rem, 2.8vw, 2.5rem);
+    padding: 0;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .product-story__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (min-width: 750px) {
+    .product-story__track {
+      grid-auto-columns: calc((100% - clamp(1rem, 2.8vw, 2.5rem) * 3) / 4);
+    }
+  }
+
+  .product-story__slide {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius-small);
+    background: var(--color-card);
+    scroll-snap-align: start;
+  }
+
+  .product-story__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .product-story__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .product-story__arrow:hover {
+    transform: translateY(-50%) scale(1.05);
+  }
+
+  .product-story__arrow--prev {
+    left: -1.5rem;
+  }
+
+  .product-story__arrow--next {
+    right: -1.5rem;
+  }
+
+  @media (hover: none) {
+    .product-story__arrow {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "História do produto",
+  "class": "section-product-story",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_prefix",
+      "label": "Título antes do nome do produto",
+      "default": "conheça",
+      "info": "Para um título próprio, crie o metafield custom.story_heading. Para imagens próprias, custom.story_images (lista de arquivos)."
+    }
+  ],
+  "enabled_on": {
+    "templates": ["product"]
+  }
+}
+{% endschema %}

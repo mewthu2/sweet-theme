@@ -1,12 +1,14 @@
 {%- liquid
   assign fetch_priority = 'auto'
+  assign loading = 'lazy'
   if section.index == 1
     assign fetch_priority = 'high'
+    assign loading = 'eager'
   endif
 -%}
 
 <div
-  class="hero full-width hero--{{ section.settings.height }} hero--{{ section.settings.content_position }}"
+  class="hero hero--{{ section.settings.height }} hero--{{ section.settings.content_position }} hero--{{ section.settings.heading_style }}"
   style="--hero-fg: {{ section.settings.text_color }}; --hero-overlay: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"
 >
   <div class="hero__media">
@@ -21,14 +23,14 @@
           {{
             section.settings.image
             | image_url: width: 3000
-            | image_tag: class: 'hero__image', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2500, 3000', fetchpriority: fetch_priority, loading: 'eager'
+            | image_tag: class: 'hero__image', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2500, 3000', fetchpriority: fetch_priority, loading: loading
           }}
         </picture>
       {%- else -%}
         {{
           section.settings.image
           | image_url: width: 3000
-          | image_tag: class: 'hero__image', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2500, 3000', fetchpriority: fetch_priority, loading: 'eager'
+          | image_tag: class: 'hero__image', sizes: '100vw', widths: '750, 1100, 1500, 2000, 2500, 3000', fetchpriority: fetch_priority, loading: loading
         }}
       {%- endif -%}
     {%- else -%}
@@ -36,27 +38,35 @@
     {%- endif -%}
   </div>
 
-  <div class="hero__content">
-    <div class="hero__text">
-      {%- if section.settings.eyebrow != blank -%}
-        <p class="eyebrow hero__eyebrow">{{ section.settings.eyebrow }}</p>
-      {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="h1 hero__heading">{{ section.settings.heading }}</h2>
-      {%- endif -%}
-      {%- if section.settings.text != blank -%}
-        <div class="hero__body">{{ section.settings.text }}</div>
-      {%- endif -%}
-      {%- if section.settings.button_label != blank -%}
-        <a
-          href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
-          class="button {{ section.settings.button_style }} hero__button"
-        >
-          {{- section.settings.button_label -}}
-        </a>
-      {%- endif -%}
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.text != blank or section.settings.button_label != blank -%}
+    <div class="hero__content">
+      <div class="hero__text">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="eyebrow hero__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="hero__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="hero__body">{{ section.settings.text }}</div>
+        {%- endif -%}
+        {%- if section.settings.button_label != blank -%}
+          <a
+            href="{{ section.settings.button_link | default: routes.all_products_collection_url }}"
+            class="button {{ section.settings.button_style }} hero__button"
+          >
+            {{- section.settings.button_label -}}
+          </a>
+        {%- endif -%}
+      </div>
     </div>
-  </div>
+  {%- endif -%}
+
+  {%- if section.settings.image and section.settings.button_link != blank and section.settings.button_label == blank -%}
+    <a href="{{ section.settings.button_link }}" class="hero__link">
+      <span class="visually-hidden">{{ section.settings.heading | default: shop.name }}</span>
+    </a>
+  {%- endif -%}
 </div>
 
 {% stylesheet %}
@@ -65,23 +75,25 @@
     display: grid;
     min-height: var(--hero-height, 80svh);
     overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--color-surface);
     color: var(--hero-fg);
   }
 
   .hero--small {
-    --hero-height: 50svh;
+    --hero-height: min(50svh, 32rem);
   }
 
   .hero--medium {
-    --hero-height: 70svh;
+    --hero-height: min(68svh, 42rem);
   }
 
   .hero--large {
-    --hero-height: 85svh;
+    --hero-height: calc(100svh - 5.5rem);
   }
 
   .hero--full {
-    --hero-height: calc(100svh - var(--header-height));
+    --hero-height: calc(100svh - 4.5rem);
   }
 
   .hero__media,
@@ -97,8 +109,12 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgb(0 0 0 / var(--hero-overlay)), transparent 60%);
+    background: linear-gradient(to top, rgb(0 0 0 / var(--hero-overlay)), transparent 55%);
     pointer-events: none;
+  }
+
+  .hero--center .hero__media::after {
+    background: rgb(0 0 0 / calc(var(--hero-overlay) * 0.6));
   }
 
   .hero__image {
@@ -113,14 +129,11 @@
     position: relative;
     z-index: 1;
     display: flex;
-    width: min(var(--page-width), 100%);
-    margin-inline: auto;
-    padding: clamp(1.5rem, 4vw, 3.5rem) var(--page-margin);
+    padding: clamp(1.25rem, 0.8rem + 1.5vw, 2rem);
   }
 
   .hero--bottom-left .hero__content {
     align-items: flex-end;
-    justify-content: flex-start;
   }
 
   .hero--bottom-center .hero__content {
@@ -137,36 +150,57 @@
 
   .hero--top-left .hero__content {
     align-items: flex-start;
-    justify-content: flex-start;
   }
 
   .hero__text {
     display: flex;
     flex-direction: column;
-    gap: 0.9rem;
-    max-width: 34rem;
+    align-items: flex-start;
+    gap: 0.6rem;
+    max-width: 30rem;
   }
 
   .hero--center .hero__text,
   .hero--bottom-center .hero__text {
     align-items: center;
-  }
-
-  .hero--bottom-left .hero__text,
-  .hero--top-left .hero__text {
-    align-items: flex-start;
+    max-width: 36rem;
   }
 
   .hero__heading {
     color: inherit;
+    font-size: clamp(1.75rem, 1.3rem + 1.4vw, 2.5rem);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+  }
+
+  .hero--bold .hero__heading {
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+    font-weight: var(--font-bold--weight);
+    letter-spacing: 0;
   }
 
   .hero__body {
     font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .hero--bold .hero__body {
+    margin-top: 0.75rem;
   }
 
   .hero__button {
-    margin-top: 0.5rem;
+    margin-top: 0.4rem;
+  }
+
+  .hero--bold .hero__button {
+    margin-top: 1.25rem;
+  }
+
+  .hero__link {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
   }
 {% endstylesheet %}
 
@@ -203,22 +237,31 @@
       "content": "Conteúdo"
     },
     {
+      "type": "select",
+      "id": "heading_style",
+      "label": "Estilo do texto",
+      "options": [
+        { "value": "editorial", "label": "Título grande (banner do topo)" },
+        { "value": "bold", "label": "Título pequeno em negrito (banner de texto)" }
+      ],
+      "default": "editorial"
+    },
+    {
       "type": "text",
       "id": "eyebrow",
       "label": "Chamada pequena",
-      "default": "Novo"
+      "default": "Glow premiado"
     },
     {
       "type": "text",
       "id": "heading",
       "label": "Título",
-      "default": "Glow que conquista"
+      "default": "O queridinho das skincare lovers."
     },
     {
       "type": "richtext",
       "id": "text",
-      "label": "Texto",
-      "default": "<p>Skincare e make pensados para a sua rotina.</p>"
+      "label": "Texto"
     },
     {
       "type": "text",
@@ -229,16 +272,17 @@
     {
       "type": "url",
       "id": "button_link",
-      "label": "Link do botão"
+      "label": "Link",
+      "info": "Sem texto no botão, o banner inteiro vira link."
     },
     {
       "type": "select",
       "id": "button_style",
       "label": "Estilo do botão",
       "options": [
-        { "value": "button--light", "label": "Claro" },
-        { "value": "", "label": "Verde" },
-        { "value": "button--secondary", "label": "Contorno" }
+        { "value": "button--light", "label": "Contorno branco" },
+        { "value": "button--secondary", "label": "Contorno verde" },
+        { "value": "button--solid", "label": "Verde preenchido" }
       ],
       "default": "button--light"
     },
@@ -268,12 +312,24 @@
       "step": 5,
       "unit": "%",
       "label": "Escurecimento da imagem",
-      "default": 25
+      "default": 20
     }
   ],
   "presets": [
     {
       "name": "Banner principal"
+    },
+    {
+      "name": "Banner com texto centralizado",
+      "settings": {
+        "height": "medium",
+        "heading_style": "bold",
+        "content_position": "center",
+        "eyebrow": "",
+        "heading": "um de cada, todos muito bons",
+        "text": "<p>Na Sweet, a ideia é simples: poucos produtos, feitos com cuidado, que você usa todo dia e sempre quer de novo.</p>",
+        "button_label": "Comprar Sweet"
+      }
     }
   ]
 }

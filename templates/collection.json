@@ -3,13 +3,16 @@
     "main": {
       "type": "collection",
       "settings": {
+        "show_banner": true,
+        "show_description": false,
         "products_per_page": 24,
-        "columns": 4,
-        "enable_filtering": true,
         "enable_sorting": true,
+        "enable_filtering": false,
         "show_quick_add": true
       }
     }
   },
-  "order": ["main"]
+  "order": [
+    "main"
+  ]
 }

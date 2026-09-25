@@ -1,0 +1,184 @@
+<div class="values">
+  <div class="values__text card">
+    <div class="values__intro">
+      {%- if section.settings.statement != blank -%}
+        <p class="values__statement">{{ section.settings.statement }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link | default: routes.root_url }}" class="button">{{ section.settings.button_label }}</a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="values__list">
+        {%- for block in section.blocks -%}
+          <details class="values__item" name="values-{{ section.id }}" {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
+            <summary class="values__title">{{ block.settings.title }}</summary>
+            <div class="values__body rte">{{ block.settings.text }}</div>
+          </details>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <div class="values__media card">
+    {%- if section.settings.image -%}
+      {{
+        section.settings.image
+        | image_url: width: 1600
+        | image_tag: class: 'values__image', sizes: '(min-width: 990px) 45vw, 100vw', widths: '500, 800, 1100, 1600', loading: 'lazy'
+      }}
+    {%- else -%}
+      {{ 'lifestyle-1' | placeholder_svg_tag: 'placeholder-svg values__image' }}
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .values {
+    display: grid;
+    gap: var(--section-gap);
+  }
+
+  @media (min-width: 990px) {
+    .values {
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    }
+  }
+
+  .values__text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    padding: clamp(1.5rem, 1rem + 1.5vw, 2rem);
+  }
+
+  .values__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .values__statement {
+    color: var(--color-heading);
+    font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.5rem);
+    line-height: 1.12;
+    letter-spacing: -0.005em;
+  }
+
+  .values__list {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .values__item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .values__item:last-child {
+    border-bottom: 0;
+  }
+
+  .values__title {
+    padding-block: 1.1rem;
+    color: var(--color-heading);
+    font-size: clamp(1.25rem, 1.1rem + 0.6vw, 1.75rem);
+    font-weight: var(--font-bold--weight);
+    line-height: 1.2;
+    list-style: none;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s var(--ease);
+  }
+
+  .values__title::-webkit-details-marker {
+    display: none;
+  }
+
+  .values__item[open] .values__title,
+  .values__title:hover {
+    opacity: 1;
+  }
+
+  .values__body {
+    padding-bottom: 1.25rem;
+    max-width: 34rem;
+    animation: mega-fade 0.3s var(--ease);
+  }
+
+  .values__media {
+    position: relative;
+    min-height: 22rem;
+  }
+
+  .values__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Valores",
+  "class": "section-values",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "statement",
+      "label": "Frase de destaque",
+      "default": "Para CUIDAR, PROTEGER e REALÇAR a pele que você tem hoje, com resultados que aparecem com o tempo."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Texto do botão",
+      "default": "Nossos valores"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Link do botão"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagem"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "missão"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Texto",
+          "default": "<p>Criar produtos gostosos de usar, com fórmulas eficazes e preço justo.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Valores",
+      "blocks": [
+        { "type": "item", "settings": { "title": "missão" } },
+        { "type": "item", "settings": { "title": "comunidade", "text": "<p>Crescemos junto com quem usa Sweet todos os dias.</p>" } },
+        { "type": "item", "settings": { "title": "sustentabilidade", "text": "<p>Embalagens pensadas para durar e gerar menos resíduo.</p>" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

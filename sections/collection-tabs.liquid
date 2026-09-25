@@ -1,4 +1,4 @@
-<div class="collection-tabs section-spacing" style="--columns: {{ section.settings.columns }};">
+<div class="collection-tabs card card-padding" style="--columns: {{ section.settings.columns }};">
   <div class="collection-tabs__header">
     {%- if section.settings.heading != blank -%}
       <h2 class="collection-tabs__heading">{{ section.settings.heading }}</h2>
@@ -64,7 +64,7 @@
 
       {%- if collection != blank -%}
         <div class="collection-tabs__footer">
-          <a href="{{ collection.url }}" class="button button--secondary">
+          <a href="{{ collection.url }}" class="button">
             {{- 'header.shop_title' | t: title: collection.title -}}
           </a>
         </div>
@@ -75,43 +75,56 @@
 
 {% stylesheet %}
   .collection-tabs__header {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 1rem 2rem;
+    display: grid;
+    justify-items: center;
+    gap: 1.5rem;
     margin-bottom: 2rem;
+    text-align: center;
   }
 
   .collection-tabs__list {
     display: flex;
-    gap: 1.5rem;
+    gap: 0.5rem 3rem;
+    max-width: 100%;
     overflow-x: auto;
     scrollbar-width: none;
-    max-width: 100%;
   }
 
   .collection-tabs__tab {
     flex: none;
-    padding: 0.25rem 0;
+    padding: 0 0 0.4rem;
     border: 0;
     border-bottom: 1px solid transparent;
     background: none;
-    color: var(--color-foreground);
-    font-size: 1rem;
-    text-transform: lowercase;
+    color: var(--color-heading);
+    font-weight: var(--font-bold--weight);
+    text-transform: uppercase;
+    opacity: 0.45;
     cursor: pointer;
+    transition: opacity 0.2s var(--ease);
+  }
+
+  .collection-tabs__tab:hover,
+  .collection-tabs__tab[aria-selected='true'] {
+    opacity: 1;
   }
 
   .collection-tabs__tab[aria-selected='true'] {
-    color: var(--color-heading);
     border-color: currentcolor;
+  }
+
+  .collection-tabs .product-card {
+    background: var(--color-background);
+  }
+
+  .collection-tabs__panel {
+    animation: mega-fade 0.35s var(--ease);
   }
 
   .collection-tabs__footer {
     display: flex;
     justify-content: center;
-    margin-top: 2.5rem;
+    margin-top: 2rem;
   }
 {% endstylesheet %}
 
@@ -140,10 +153,10 @@
       "type": "range",
       "id": "columns",
       "min": 2,
-      "max": 5,
+      "max": 4,
       "step": 1,
       "label": "Colunas no desktop",
-      "default": 4
+      "default": 3
     },
     {
       "type": "checkbox",
